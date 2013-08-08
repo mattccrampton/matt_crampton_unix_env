@@ -1,0 +1,17 @@
+
+# Bash conf files
+rm ~/.profile
+ln -s ~/matt_crampton_unix_env/bash/.profile ~/.profile
+rm ~/.bashrc
+ln -s ~/matt_crampton_unix_env/bash/.bashrc ~/.bashrc
+rm ~/multitail.conf
+ln -s ~/matt_crampton_unix_env/bash/multitail.conf ~/multitail.conf
+
+# tmux conf files
+rm ~/.tmux.conf
+ln -s ~/matt_crampton_unix_env/tmux/.tmux.conf ~/.tmux.conf
+
+# vim
+rm ~/.vimrc
+ln -s ~/matt_crampton_unix_env/vim/.vimrc ~/.vimrc
+
