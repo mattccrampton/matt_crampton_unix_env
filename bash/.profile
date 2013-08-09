@@ -180,6 +180,24 @@ function gnarleyGrep
 	export LANG=C; find . | egrep -vi ".jpg|.gif|.png|.swf" | xargs grep -i "$query" 2>&1 | sed -e "s|\t||g" | egrep -v ".svn|No such file or directory|FreeBSD.6|Binary file"
 }
 
+function gnarleyUnixEnvStatus
+{
+	echo
+	echo Checking ~/matt_crampton_unix_env
+	cd ~/matt_crampton_unix_env
+	git status
+	cd -
+
+	if [ -f ~/matt_crampton_private_unix_env/bash/.profile.PRIVATE ]
+	then
+		echo
+		echo Checking ~/matt_crampton_private_unix_env
+		cd ~/matt_crampton_private_unix_env
+		git status
+		cd -
+	fi
+}
+
 function gnarleyEdit
 {
 	if [ -f ~/matt_crampton_private_unix_env/bash/.profile.PRIVATE ]
