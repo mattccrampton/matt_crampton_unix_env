@@ -215,7 +215,7 @@ function gnarleyUpdate
 {
 	echo "Updating conf"
 	cd ~/matt_crampton_unix_env
-	git fetch
+	git pull
 	source ~/matt_crampton_unix_env/bash/.profile
 
 	if [ -f ~/.subversion/config ];

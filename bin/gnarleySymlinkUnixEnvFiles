@@ -15,3 +15,8 @@ ln -s ~/matt_crampton_unix_env/tmux/.tmux.conf ~/.tmux.conf
 rm ~/.vimrc
 ln -s ~/matt_crampton_unix_env/vim/.vimrc ~/.vimrc
 
+
+if [ -f ~/matt_crampton_private_unix_env/bin/gnarleySymlinkPrivateUnixEnvFiles ]
+then
+	~/matt_crampton_private_unix_env/bin/gnarleySymlinkPrivateUnixEnvFiles
+fi
