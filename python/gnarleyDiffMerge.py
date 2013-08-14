@@ -1,10 +1,10 @@
 #!/usr/bin/env python
+
+from filecmp import dircmp
 from subprocess import Popen, PIPE, STDOUT
 import time
 import sys
 import os
-
-
 
 class ConsoleDialog():
 
@@ -33,12 +33,8 @@ class ConsoleDialog():
 				SETB = unicode(SETB)
 			except:
 				print "Failed for %s" % (option)
-				#sys.exit(0)
 				continue
-		#raw_input("Press ENTER to continue")
 
-		#SETC=""
-		#SETC=" \"---\" \"---\" "
                 SETC=" \"\" \"QUIT\" "
 
 
@@ -56,14 +52,22 @@ class ConsoleDialog():
 class GnarleyDiffMerge():
 
 	def __init__(self,dir1,dir2):
+		self.stopwords=['.svn','aws-sdk','.png','.jpg','.gif','css-min','js-min']
+
 		self.CD = ConsoleDialog()
 		self.dir1 = dir1
 		self.dir2 = dir2
 
 	def run(self):
-		self.generateDiffFileList()
+
+		dcmp = dircmp(self.dir1, self.dir2)
+		diffDict = self.generateDiffDict(dcmp) 
+
+		print diffDict
+		#sys.exit(0)
+
 		while (True):
-			RESULT = self.CD.ShowDialog("Files that differ",self.diffDict)
+			RESULT = self.CD.ShowDialog("Files that differ",diffDict)
 			if not RESULT or RESULT == "":
 				os.system("clear")
 				sys.exit(0)
@@ -71,44 +75,37 @@ class GnarleyDiffMerge():
 				os.system("vimdiff %s/%s %s/%s" % (self.dir1,RESULT,self.dir2,RESULT))
 				#s = raw_input('"HIT ENTER TO CONTINUE')
 
-	def generateDiffFileList(self):
-		#commandResult = self.doSystemCommand(diffCommand)
-		#print commandResult 
-		print "Scanning for files..."
+		sys.exit(0)
 
-		dir1Files = self.pullAllFiles(self.dir1)
-		dir2Files = self.pullAllFiles(self.dir2)
 
-		self.diffDict = self.compareFilesLists(dir1Files, dir2Files)
-
-	def compareFilesLists(self, dir1Files, dir2Files):
-		totalCount = len(dir1Files) + len(dir2Files)
-		print "Found %s files to scan.  Scanning now..." % (totalCount)
-
-		newDict = {}
-		for dir1 in dir1Files:
-			if dir1 in dir2Files:
-				newDict[dir1] = "----both----"
-			else:
-				newDict[dir1] = "dir1--------"
-
-		for dir2 in dir2Files:
-			if dir2 not in dir1Files:
-				newDict[dir2] = "--------dir2"
-
-		print "Checking for differences..."
+	def generateDiffDict(self, dcmp):
 
 		diffDict = {}
-		for fileName in newDict:
-			if newDict[fileName] == "----both----":
-				diffCommand = "diff -q %s/%s %s/%s" % (self.dir1, fileName, self.dir2, fileName)
-				stdout, stderr = self.doSystemCommand(diffCommand)
-				if stdout:
-					diffDict[fileName] = newDict[fileName]
-					print "Found %s changed files" %(len(diffDict))
-			else:
-				diffDict[fileName] = newDict[fileName]
-				print "Found %s changed files" %(len(diffDict))
+
+		for name in dcmp.diff_files:
+			filenameLeft = "%s/%s" % (dcmp.left,name)
+			filenameLeft = filenameLeft.replace(self.dir1,"").replace(self.dir2,"")
+			if not self.does_string_contain(filenameLeft, self.stopwords):
+				print "diff_file %s" % (filenameLeft)
+				diffDict[filenameLeft] = "----both----"
+
+
+		for name in list(set(dcmp.left_list) - set(dcmp.right_list)):
+			filename = "%s/%s" % (dcmp.left,name)
+			filename = filename.replace(self.dir1,"").replace(self.dir2,"")
+			if not self.does_string_contain(filename, self.stopwords):
+				diffDict[filename] = "dir1--------"
+				print "LEFT - %s" % (filename)
+
+		for name in list(set(dcmp.right_list) - set(dcmp.left_list)):
+			filename = "%s/%s" % (dcmp.right,name)
+			filename = filename.replace(self.dir1,"").replace(self.dir2,"")
+			if not self.does_string_contain(filename, self.stopwords):
+				diffDict[filename] = "--------dir2"
+				print "RIGHT - %s" % (filename)
+
+		for sub_dcmp in dcmp.subdirs.values():
+			diffDict.update(self.generateDiffDict(sub_dcmp))
 
 		return diffDict
 
@@ -119,32 +116,8 @@ class GnarleyDiffMerge():
 				return True
 		return False
 
-	def pullAllFiles(self, dir):
-		allFilesList = []
-		stopwords=['.svn','aws-sdk','.png','.jpg','.gif']
-
-		for root, subFolders, files in os.walk(dir.encode("ascii")):
-			for file in files:
-				truncatedRoot = root.replace(dir + "/","")
-				fileName = os.path.join(truncatedRoot,file)
-
-				if not self.does_string_contain(fileName, stopwords):
-					allFilesList.append(fileName)
 
 
-		return allFilesList
-
-	def doSystemCommand(self, cmd):
-		p = Popen(cmd, shell=True, stdout=PIPE, stderr=PIPE)
-		#stdout, stderr = p.communicate()
-		#return stdout
-		return p.communicate()
-
-
-
-
-
-###### START STUFF  ###############
 
 def main():
 	if len(sys.argv) > 2:
@@ -157,25 +130,6 @@ def main():
 
 if __name__ == "__main__":
 	main()
-
-
-
-
-
-
-############ DEFINE FUNCTONS HERE #############
-#
-#def gnarleyShowPaths():   
-#	#shows environment paths currently set
-#	for path in  os.environ["PATH"].split(":"):
-#		print path
-#
-#def printSystemCommand(cmd):
-#	stdout, stderr = doSystemCommand(cmd)
-#	result = stdout.strip(' \t\n\r')
-#	if result != "":
-#		print result
-
 
 
 

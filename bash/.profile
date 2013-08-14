@@ -79,6 +79,22 @@ fi
 
 #### UTIL FUNCTIONS ####################################
 
+function gnarleyValidateJSON
+{
+	if [ -f $1 ]
+	then
+		python -m json.tool < $1
+	else
+		echo pass a json file to this function to validate it.  if
+		echo it pretty prints out the json, it worked!
+	fi
+}
+
+function gnarleyDiffMerge
+{
+	~/matt_crampton_unix_env/python/gnarleyDiffMerge.py $1 $2
+}
+
 function svnupdryrun
 {
 	svn merge --dry-run -r BASE:HEAD .
