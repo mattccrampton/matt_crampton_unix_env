@@ -395,3 +395,6 @@ endfunction
 
 
 """""""""""""""""" vim tab stuff """""""""""""""""""""""""""""
+
+
+:so ~/matt_crampton_unix_env/vim/plugin/supertab.vim

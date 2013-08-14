@@ -1,0 +1,5 @@
+git config --global diff.tool vimdiff
+git config --global difftool.prompt false
+git config --global alias.d difftool
+
+#now you can git d  to diff files.

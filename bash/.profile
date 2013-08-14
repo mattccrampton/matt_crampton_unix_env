@@ -215,6 +215,7 @@ function gnarleyUpdate
 			echo ""
 		fi
 	fi
+	cd -
 
 	#### If matt's private env is present ###############
 	if [ -f ~/matt_crampton_private_unix_env/bash/.profile.PRIVATE ]
