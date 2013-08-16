@@ -41,6 +41,7 @@ export SVN_EDITOR="/usr/bin/vim"
 
 #### ALIASES ###########################################
 alias unixEnv="cd ~/matt_crampton_unix_env"
+alias bin="cd ~/matt_crampton_unix_env/bin"
 alias ll=gnarleyDir
 alias dird=gnarleyListDirs
 alias dir=gnarleyDir
