@@ -196,7 +196,23 @@ function gnarleyGrep
 	export LANG=C; find . | egrep -vi ".jpg|.gif|.png|.swf" | xargs grep -i "$query" 2>&1 | sed -e "s|\t||g" | egrep -v ".svn|No such file or directory|FreeBSD.6|Binary file"
 }
 
-function gnarleyUnixEnvStatus
+function gnarleyCommit
+{
+	gnarleyStatus
+	echo ""
+	echo "Are you sure you want to run git commit -a for matt_crampton_unix_env?"
+	echo "(y/N)"
+	read YESORNO;
+
+	if [ "$YESORNO" = "y" -o "$YESORNO" = "Y" ]
+	then
+		cd ~/matt_crampton_unix_env
+		git commit -a
+		cd -
+	fi
+}
+
+function gnarleyStatus
 {
 	echo
 	echo Checking ~/matt_crampton_unix_env
@@ -206,11 +222,7 @@ function gnarleyUnixEnvStatus
 
 	if [ -f ~/matt_crampton_private_unix_env/bash/.profile.PRIVATE ]
 	then
-		echo
-		echo Checking ~/matt_crampton_private_unix_env
-		cd ~/matt_crampton_private_unix_env
-		git status
-		cd -
+		gnarleyPrivateStatus
 	fi
 }
 
