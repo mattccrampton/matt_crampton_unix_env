@@ -1,0 +1,7 @@
+curl -s http://mattcrampton.com/ip.php > ~/matt_crampton_unix_env/notes/matt_last_ip.txt
+echo "-" >> ~/matt_crampton_unix_env/notes/matt_last_ip.txt
+date >> ~/matt_crampton_unix_env/notes/matt_last_ip.txt
+cd ~/matt_crampton_unix_env/notes
+git commit matt_last_ip.txt -m "Updating current IP note"
+git push
+cd -
