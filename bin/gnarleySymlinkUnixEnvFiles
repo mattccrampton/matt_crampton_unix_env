@@ -14,7 +14,8 @@ ln -s ~/matt_crampton_unix_env/tmux/.tmux.conf ~/.tmux.conf
 # vim
 rm ~/.vimrc
 ln -s ~/matt_crampton_unix_env/vim/.vimrc ~/.vimrc
-
+mv ~/.vim ~/.vim.BACKUP
+ln -s ~/matt_crampton_unix_env/vim/ ~/.vim
 
 if [ -f ~/matt_crampton_private_unix_env/bin/gnarleySymlinkPrivateUnixEnvFiles ]
 then

@@ -288,6 +288,9 @@ function gnarleyUpdate
 	fi
 	cd -
 
+	echo "Symlinking files"
+	~/matt_crampton_unix_env/bin/gnarleySymlinkUnixEnvFiles
+
 	#### If matt's private env is present ###############
 	if [ -f ~/matt_crampton_private_unix_env/bash/.profile.PRIVATE ]
 	then
