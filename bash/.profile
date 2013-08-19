@@ -371,6 +371,37 @@ function gnarleyDirClean
 	fi
 }
 
+function gnarleyCreateCtagsFromGigwalkTrunk
+{
+exec `brew --prefix`/bin/ctags -f ~/.vim/my_ctags/gigwalk \
+-h \".php\" -R .\
+--exclude=\"\.svn\" \
+--exclude=\"\.git\" \
+--exclude=\"*.js\" \
+--totals=yes \
+--tag-relative=yes \
+--PHP-kinds=+cf \
+--regex-PHP=/abstract\s+class\s+([^ ]+)/\1/c/ \
+--regex-PHP=/interface\s+([^ ]+)/\1/c/ \
+--regex-PHP=/(public\s+|static\s+|abstract\s+|protected\s+|private\s+)function\s+\&?\s*([^ (]+)/\2/f/ 
+
+
+}
+
+function gnarleyCtags
+{
+	if command_exists ctags ; then
+
+		BREWCTAGS="`brew --prefix`/bin/ctags"
+		if [ -f $BREWCTAGS ]
+		then
+			$BREWCTAGS $*
+		else
+			ctags $*
+		fi
+
+	fi
+}
 
 export PS1="[\[\e[37;1m\]\u\[\e[31;1m\]@\[\e[37;1m\]$gnarleyHostName\[\e[0m\]]\[\e[32m\] \w/\[\e[0m\]"
 

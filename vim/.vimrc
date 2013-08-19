@@ -1,8 +1,11 @@
 
 "xnoremap <expr> p v:register=='"'?'pgvy':'p'
 
+nnoremap <C-T>  <C-w><C-]><C-w>T
+
 "set list
-set tags=tags;/
+set tags=/tmp/vim_ctags
+"set tags=~/.vim/my_ctags/gigwalk
 set listchars=tab:>.
 "set listchars=tab:>.,trail:.,extends:#,nbsp:.
 set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:<
@@ -129,8 +132,6 @@ autocmd BufEnter * let &titlestring = hostname() . "[vim(" . expand("%:t") . ")]
 map <Enter> O<ESC><ESC><Down>
 "map <Enter> I<CR><ESC>
 noremap \\ :%s:::c<Left><Left><Left>
-noremap \g\ :!find ~/dev/yahoo/properties/ \| grep -v CVS \| grep -v package \| xargs grep ""<Left>
-
 
 fixdel
 
@@ -153,14 +154,14 @@ noremap } :set nowrap<CR>
 
 map gf :tabe <cfile><CR>
 "map gx :tabe ../xsl/<cfile>.xsl<CR>
-map # :s/^/\/\//<CR>
+"map # :s/^/\/\//<CR>
 
 map l :set invlist<CR>
 
 
 map M z.
 
-cmap w!! %!sudo tee > /dev/null %                                                                                                                        
+"cmap w!! %!sudo tee > /dev/null %
 
 
 "map s :setlocal spell spelllang=en_us<CR>:syntax clear<CR>
@@ -194,21 +195,6 @@ vmap <space> zf
 "
 "nmap F :call ToggleFold()<CR>
 
-"map F :call GnarleyBuzzGrep(Prompt("0","1"))<CR>
-
-
-
-"""""""""""" depricated mappings """"""""""""""""""
-
-map GT :call DepricatedMapping()<CR>
-map GF :call DepricatedMapping()<CR>
-map GP :call DepricatedMapping()<CR>
-map F :call DepricatedMapping()<CR>
-
-function DepricatedMapping()
-	echo "Dummy! That's depricated"
-endfunction
-
 
 """""" Start custom function stuff """"""""""""""""
 map ,pm :call GnarleyPHPManual()<CR>
@@ -217,181 +203,9 @@ set pastetoggle=<C-P> " Ctrl-P toggles paste mode
 map ,o :tabe<CR>:Ex<CR>
 nmap t <C-w><C-]><C-w>T
 "nnoremap <silent> ,t :TlistToggle<CR>
-map ,gt :call GnarleyBuzzTree()<CR>
-map ,gg :call GnarleyBuzzGrep()<CR>
-map ,df :call GnarleyBuzzDefinedGrep()<CR>
-map ,gp :call GnarleyBuzzPromptGrep()<CR>
-map ,gf :call GnarleyBuzzFind()<CR>
-map ,x <Esc>:1,$!xmllint --format -<CR>
-map ,n <Esc>:NERDTree<CR>
-
-map ,f <Esc><Esc><Esc>?function<CR><Down>V<Up>$<Left>%<Up>zf/function<CR><Down>
-
-
 
 map R :registers<CR>
 
-" resize horzontal split window
-"nmap <C-Left> <C-W>-<C-W>-
-"nmap <C-Right> <C-W>+<C-W>+
-" resize vertical split window
-"nmap <C-Up> <C-W>><C-W>>
-"nmap <C-Down> <C-W><<C-W><
-"nmap <C-.> <C-W>><C-W>>
-"nmap <C-,> <C-W><<C-W><
-
-
-
-
-
-
-
-function GnarleyPHPManual()
-	normal `<
-	execute "let startcol = col(\".\")"
-	normal `>
-	execute "let endcol = col(\".\")"
-	if startcol <= endcol
-		let firstcol = startcol
-		let lastcol = endcol
-	else
-		let firstcol = endcol
-		let lastcol = startcol
-	endif
-
-	let searchterm = strpart(getline("."),firstcol-1,(lastcol-firstcol)+1)
-	"execute ":tabe"
-	"echo "links -dump http://php.corp.yahoo.com/" . searchterm
-	"execute ":r ! links -dump http://php.corp.yahoo.com/" . searchterm
-	"execute ":!links http://php.corp.yahoo.com/manual-lookup.php?pattern=" . searchterm . ""
-	execute ":! clear && ~/gnarley/gnarley/code/python/phpmanual/./getPHPManual.py " . searchterm . ""
-endfunction
-
-function GnarleyBuzzTree()
-	normal `<
-	execute "let startcol = col(\".\")"
-	normal `>
-	execute "let endcol = col(\".\")"
-	if startcol <= endcol
-		let firstcol = startcol
-		let lastcol = endcol
-	else
-		let firstcol = endcol
-		let lastcol = startcol
-	endif
-
-	let searchterm = strpart(getline("."),firstcol-1,(lastcol-firstcol)+1)
-	"echo "FINDING: " searchterm " | " firstcol " | " lastcol
-	execute ":tabe"
-	"execute ":r ! find ~/dev/yahoo/properties -name"searchterm"-print"
-	execute ":r ! ~/bin/gnarleyShowPHPIncludeTree " searchterm
-endfunction
-
-function GnarleyBuzzFind()
-	normal `<
-	execute "let startcol = col(\".\")"
-	normal `>
-	execute "let endcol = col(\".\")"
-	if startcol <= endcol
-		let firstcol = startcol
-		let lastcol = endcol
-	else
-		let firstcol = endcol
-		let lastcol = startcol
-	endif
-
-	let searchterm = strpart(getline("."),firstcol-1,(lastcol-firstcol)+1)
-	"echo "FINDING: " searchterm " | " firstcol " | " lastcol
-	execute ":tabe"
-	"execute ":r ! find ~/dev/yahoo/properties -name"searchterm"-print"
-	execute ":r ! ~/bin/gnarleyVimFind '" searchterm "'"
-	execute "map <Enter> :call GnarleyGotoBuzzFile()<CR>"
-	execute "map ,GF :call GnarleyCloseBuzzGrep()<CR>"
-	execute "map F :call GnarleyCloseBuzzGrep()<CR>"
-endfunction
-
-function GnarleyBuzzGrep()
-
-	normal `<
-	execute "let startcol = col(\".\")"
-	normal `>
-	execute "let endcol = col(\".\")"
-	if startcol <= endcol
-		let firstcol = startcol
-		let lastcol = endcol
-	else
-		let firstcol = endcol
-		let lastcol = startcol
-	endif
-
-	let searchterm = strpart(getline("."),firstcol-1,(lastcol-firstcol)+1)
-	"call SortR(a:firstline, a:lastline, firstcol, lastcol, a:wnum, a:order, a:cmp)
-        call DoGnarleyBuzzGrep(searchterm)
-endfunction
-
-function GnarleyBuzzDefinedGrep()
-
-	normal `<
-	execute "let startcol = col(\".\")"
-	normal `>
-	execute "let endcol = col(\".\")"
-	if startcol <= endcol
-		let firstcol = startcol
-		let lastcol = endcol
-	else
-		let firstcol = endcol
-		let lastcol = startcol
-	endif
-
-	let searchterm = strpart(getline("."),firstcol-1,(lastcol-firstcol)+1)
-	"call SortR(a:firstline, a:lastline, firstcol, lastcol, a:wnum, a:order, a:cmp)
-	echo "Grepping Buzz for: " searchterm
-	execute ":tabe"
-	execute ":r ! ~/bin/gnarleyVimGrep '" searchterm "' 2>/dev/null | grep -v 'No such' | grep -i function"
-	execute "map <Enter> :call GnarleyGotoBuzzFile()<CR>"
-	execute "map F :call GnarleyCloseBuzzGrep()<CR>"
-endfunction
-
-function GnarleyBuzzPromptGrep()
-	let searchterm = input("Grep Buzz:  ")
-        call DoGnarleyBuzzGrep(searchterm)
-endfunction
-
-function DoGnarleyBuzzGrep(searchterm)
-	echo "Grepping Buzz for: " a:searchterm
-	execute ":tabe"
-	execute ":r ! ~/bin/gnarleyVimGrep '" a:searchterm "' 2>/dev/null | grep -v 'No such'"
-	execute "map <Enter> :call GnarleyGotoBuzzFile()<CR>"
-	execute "map F :call GnarleyCloseBuzzGrep()<CR>"
-endfunction
-
-
-function! GnarleyCloseBuzzGrep()
-	execute ":q!"
-	execute "map ,GF :call GnarleyBuzzGrep()<CR>"
-	execute "map ,F :call GnarleyBuzzFind()<CR>"
-	execute "map <Enter> O<ESC><Down>"
-endfunction
-
-function! GnarleyGotoBuzzFile()
-	normal gf
-	execute ":tabp"
-	call GnarleyCloseBuzzGrep()
-endfunction
-
-"prompt user for settings
-function Prompt(question)
-  let default = a:0 ? a:1 : ""
-  if a:str == "0"
-    let str = "Sort by which word [(0)whole line (<0)count from right]? "
-  elseif a:str == "1"
-    let str = "Order [(f)orward (r)everse]? "
-  endif
-
-  execute "let ret = input(\"".str."\", \"".default."\")"
-
-  return ret
-endfunction
 
 
 """""""""""""""""" vim tab stuff """""""""""""""""""""""""""""
