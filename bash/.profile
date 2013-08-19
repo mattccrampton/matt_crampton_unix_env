@@ -197,7 +197,7 @@ function gnarleyGrep
 	export LANG=C; find . | egrep -vi ".jpg|.gif|.png|.swf" | xargs grep -i "$query" 2>&1 | sed -e "s|\t||g" | egrep -v ".svn|No such file or directory|FreeBSD.6|Binary file"
 }
 
-function gnarleyPush
+function gnarleyGitPush
 {
 	echo
 	echo pushing matt_crampton_unix_env
@@ -207,13 +207,13 @@ function gnarleyPush
 
 	if [ -f ~/matt_crampton_private_unix_env/bash/.profile.PRIVATE ]
 	then
-		gnarleyPrivatePush
+		gnarleyGitPrivatePush
 	fi
 }
 
-function gnarleyCommit
+function gnarleyGitCommit
 {
-	gnarleyPublicStatus
+	gnarleyGitPublicStatus
 	echo ""
 	echo "Are you sure you want to run git commit -a for matt_crampton_unix_env?"
 	echo "(y/N)"
@@ -228,21 +228,21 @@ function gnarleyCommit
 
 	if [ -f ~/matt_crampton_private_unix_env/bash/.profile.PRIVATE ]
 	then
-		gnarleyPrivateCommit
+		gnarleyGitPrivateCommit
 	fi
 }
 
-function gnarleyStatus
+function gnarleyGitStatus
 {
-	gnarleyPublicStatus
+	gnarleyGitPublicStatus
 
 	if [ -f ~/matt_crampton_private_unix_env/bash/.profile.PRIVATE ]
 	then
-		gnarleyPrivateStatus
+		gnarleyGitPrivateStatus
 	fi
 }
 
-function gnarleyPublicStatus
+function gnarleyGitPublicStatus
 {
 	echo
 	echo Checking ~/matt_crampton_unix_env
@@ -264,7 +264,7 @@ function gnarleyEdit
 	fi
 }
 
-function gnarleyUpdate
+function gnarleyGitUpdate
 {
 	echo "Updating conf"
 	cd ~/matt_crampton_unix_env
