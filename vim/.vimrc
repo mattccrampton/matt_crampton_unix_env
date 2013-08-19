@@ -1,10 +1,12 @@
 
 "xnoremap <expr> p v:register=='"'?'pgvy':'p'
 
+"control T for tagbar
 nnoremap <C-T>  <C-w><C-]><C-w>T
+"nmap <C-T> :TagbarToggle<CR>
 
 "set list
-set tags=/tmp/vim_ctags
+set tags=tags;/
 "set tags=~/.vim/my_ctags/gigwalk
 set listchars=tab:>.
 "set listchars=tab:>.,trail:.,extends:#,nbsp:.
