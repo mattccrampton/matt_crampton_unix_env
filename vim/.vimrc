@@ -201,7 +201,7 @@ vmap <space> zf
 """""" Start custom function stuff """"""""""""""""
 map ,pm :call GnarleyPHPManual()<CR>
 
-set pastetoggle=<C-P> " Ctrl-P toggles paste mode
+"set pastetoggle=<C-P> " Ctrl-P toggles paste mode
 map ,o :tabe<CR>:Ex<CR>
 nmap t <C-w><C-]><C-w>T
 "nnoremap <silent> ,t :TlistToggle<CR>
@@ -211,6 +211,9 @@ map R :registers<CR>
 
 
 """""""""""""""""" vim tab stuff """""""""""""""""""""""""""""
-
-
 :so ~/matt_crampton_unix_env/vim/plugin/supertab.vim
+
+"""""""""""""""""" ctrl p stuff """""""""""""""""""""""""""""
+"http://kien.github.io/ctrlp.vim/#installation
+"control-o opens fuzzy finder
+map <C-o> :tabe<CR>:CtrlP getcwd()<CR>
