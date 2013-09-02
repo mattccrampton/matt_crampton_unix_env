@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 from filecmp import dircmp
 from subprocess import Popen, PIPE, STDOUT
 import time
@@ -52,7 +51,7 @@ class ConsoleDialog():
 class GnarleyDiffMerge():
 
 	def __init__(self,dir1,dir2):
-		self.stopwords=['.svn','aws-sdk','.png','.jpg','.gif','css-min','js-min']
+		self.stopwords=['css-concat','js-concat','.svn','.git','aws-sdk','.png','.jpg','.gif','css-min','js-min']
 
 		self.CD = ConsoleDialog()
 		self.dir1 = dir1
@@ -82,12 +81,15 @@ class GnarleyDiffMerge():
 
 		diffDict = {}
 
+		print dcmp.left
 		for name in dcmp.diff_files:
 			filenameLeft = "%s/%s" % (dcmp.left,name)
 			filenameLeft = filenameLeft.replace(self.dir1,"").replace(self.dir2,"")
 			if not self.does_string_contain(filenameLeft, self.stopwords):
 				print "diff_file %s" % (filenameLeft)
 				diffDict[filenameLeft] = "----both----"
+			else:
+				print "checked %s" % (filenameLeft)
 
 
 		for name in list(set(dcmp.left_list) - set(dcmp.right_list)):
@@ -105,7 +107,14 @@ class GnarleyDiffMerge():
 				print "RIGHT - %s" % (filename)
 
 		for sub_dcmp in dcmp.subdirs.values():
-			diffDict.update(self.generateDiffDict(sub_dcmp))
+			if (
+				not self.does_string_contain(sub_dcmp.left, self.stopwords)
+				and not self.does_string_contain(sub_dcmp.right, self.stopwords)
+				#noone likes symlink infinite loops
+				and not os.path.islink(sub_dcmp.left)
+				and not os.path.islink(sub_dcmp.right)
+			):
+				diffDict.update(self.generateDiffDict(sub_dcmp))
 
 		return diffDict
 
