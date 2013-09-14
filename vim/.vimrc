@@ -1,8 +1,7 @@
 
 "xnoremap <expr> p v:register=='"'?'pgvy':'p'
-
 "control T for tagbar
-nnoremap <C-T>  <C-w><C-]><C-w>T
+"nnoremap <C-T>  <C-w><C-]><C-w>T
 "nmap <C-T> :TagbarToggle<CR>
 
 "set list
@@ -44,7 +43,8 @@ set history=50
 " display the current mode and partially-typed commands in the status line:
 set showmode
 set showcmd
-set notimeout
+"set notimeout
+"set timeoutlen=100
 
 
 "status line
@@ -80,17 +80,24 @@ set formatoptions-=t
 
 filetype on
 
+
+"http://stackoverflow.com/questions/815548/how-do-i-tidy-up-an-html-files-indentation-in-vi
+filetype indent on
+
 " for CSS, also have things in braces indented:
 autocmd FileType css set smartindent
 
 " for both CSS and HTML, use genuine tab characters for indentation, to make
 " files a few bytes smaller:
-autocmd FileType html,css,htm,xsl,php,inc,js,txt,java, set noexpandtab tabstop=8 shiftwidth=8
+autocmd FileType html,css,htm,xsl,php,inc,js,txt,java, set noexpandtab tabstop=8 shiftwidth=8 smartindent
 
 " in makefiles, don't expand tabs to spaces, since actual tab characters are
 " needed, and have indentation at 8 chars to be sure that all indents are tabs
 " (despite the mappings later):
 autocmd FileType make set noexpandtab shiftwidth=8
+
+"format ejs files
+au BufNewFile,BufRead *.ejs set filetype=html
 
 " make searches case-insensitive, unless they contain upper-case letters:
 set ignorecase
@@ -125,7 +132,7 @@ autocmd VimEnter * set vb t_vb=
 
 set wildmenu
 
-autocmd BufEnter * let &titlestring = hostname() . "[vim(" . expand("%:t") . ")]"
+"autocmd BufEnter * let &titlestring = hostname() . "[vim(" . expand("%:t") . ")]"
 
 "set lcs=tab:»-
 
