@@ -182,19 +182,19 @@ function watchLogs
 function gnarleyGrepC
 {
 	query=`echo $1 | sed -e "s| |\ |g"`
-	export LANG=C; find . | egrep -vi ".jpg|.gif|.png|.swf" | xargs grep -ci "$query" 2>&1  | egrep -v ".svn|.gi|.git|Is a direcory|No such file or directory|FreeBSD.6|\:0"
+	export LANG=C; find . -type f | egrep -vi ".git|.svn|.jpg|.gif|.png|.swf|tags\'" | xargs grep -ci "$query" 2>&1  | egrep -v ".svn|No such file or directory|FreeBSD.6|\:0"
 }
 
 function gnarleyGrepCase
 {
 	query=`echo $1 | sed -e "s| |\ |g"`
-	export LANG=C; find . | egrep -vi ".jpg|.gif|.png|.swf" | xargs grep "$query" 2>&1 | sed -e "s|\t||g" | egrep -v ".svn|.gi|.git|Is a direcory|No such file or directory|FreeBSD.6|Binary file"
+	export LANG=C; find . -type f | egrep -vi ".git|.svn|.jpg|.gif|.png|.swf|tags\'" | xargs grep "$query" 2>&1 | sed -e "s|\t||g" | egrep -v ".svn|No such file or directory|FreeBSD.6|Binary file"
 }
 
 function gnarleyGrep
 {
 	query=`echo $1 | sed -e "s| |\ |g"`
-	export LANG=C; find . | egrep -vi ".jpg|.gif|.png|.swf" | xargs grep -i "$query" 2>&1 | sed -e "s|\t||g" | egrep -v ".svn|.gi|.git|Is a direcory|No such file or directory|FreeBSD.6|Binary file"
+	export LANG=C; find . -type f | egrep -vi ".git|.svn|.jpg|.gif|.png|.swf|tags\'" | xargs grep -i "$query" 2>&1 | sed -e "s|\t||g" | egrep -v ".svn|No such file or directory|FreeBSD.6|Binary file"
 }
 
 function gnarleyGitPush
