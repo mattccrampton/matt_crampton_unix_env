@@ -179,22 +179,24 @@ function watchLogs
 }
 
 
+export GNARLEYGREPFILTER="PHPPowerPoint|PHPExcel|aws-sdk|js-concat|css-min|js-min|.git|.svn|.jpg|.gif|.png|.swf|tags\'"
+
 function gnarleyGrepC
 {
 	query=`echo $1 | sed -e "s| |\ |g"`
-	export LANG=C; find . -type f | egrep -vi ".git|.svn|.jpg|.gif|.png|.swf|tags\'" | xargs grep -ci "$query" 2>&1  | egrep -v ".svn|No such file or directory|FreeBSD.6|\:0"
+	export LANG=C; find . -type f | egrep -vi "$GNARLEYGREPFILTER" | xargs grep -ci "$query" 2>&1  | egrep -v ".svn|No such file or directory|FreeBSD.6|\:0"
 }
 
 function gnarleyGrepCase
 {
 	query=`echo $1 | sed -e "s| |\ |g"`
-	export LANG=C; find . -type f | egrep -vi ".git|.svn|.jpg|.gif|.png|.swf|tags\'" | xargs grep "$query" 2>&1 | sed -e "s|\t||g" | egrep -v ".svn|No such file or directory|FreeBSD.6|Binary file"
+	export LANG=C; find . -type f | egrep -vi "$GNARLEYGREPFILTER" | xargs grep "$query" 2>&1 | sed -e "s|\t||g" | egrep -v ".svn|No such file or directory|FreeBSD.6|Binary file"
 }
 
 function gnarleyGrep
 {
 	query=`echo $1 | sed -e "s| |\ |g"`
-	export LANG=C; find . -type f | egrep -vi ".git|.svn|.jpg|.gif|.png|.swf|tags\'" | xargs grep -i "$query" 2>&1 | sed -e "s|\t||g" | egrep -v ".svn|No such file or directory|FreeBSD.6|Binary file"
+	export LANG=C; find . -type f | egrep -vi "$GNARLEYGREPFILTER" | xargs grep -i "$query" 2>&1 | sed -e "s|\t||g" | egrep -v ".svn|No such file or directory|FreeBSD.6|Binary file"
 }
 
 function gnarleyGitPush
@@ -427,4 +429,13 @@ fi
 
 #Echos status to screen
 echo -n -e "\033]0;$gnarleyHostName\007"
+
+INTTEST=0
+if [[ -t "$INTTEST" || -p /dev/stdin ]]
+then
+	curl https://api.github.com/zen
+	echo
+fi
+
+
 
