@@ -216,17 +216,17 @@ function gnarleyGitPush
 function gnarleyGitCommit
 {
 	gnarleyGitPublicStatus
-	echo ""
-	echo "Are you sure you want to run git commit -a for matt_crampton_unix_env?"
-	echo "(y/N)"
-	read YESORNO;
+	#echo ""
+	#echo "Are you sure you want to run git commit -a for matt_crampton_unix_env?"
+	#echo "(y/N)"
+	#read YESORNO;
 
-	if [ "$YESORNO" = "y" -o "$YESORNO" = "Y" ]
-	then
+	#if [ "$YESORNO" = "y" -o "$YESORNO" = "Y" ]
+	#then
 		cd ~/matt_crampton_unix_env
 		git commit -a
 		cd -
-	fi
+	#fi
 
 	if [ -f ~/matt_crampton_private_unix_env/bash/.profile.PRIVATE ]
 	then
