@@ -430,12 +430,12 @@ fi
 #Echos status to screen
 echo -n -e "\033]0;$gnarleyHostName\007"
 
-INTTEST=0
-if [[ -t "$INTTEST" || -p /dev/stdin ]]
-then
-	curl https://api.github.com/zen
-	echo
-fi
+#INTTEST=0
+#if [[ -t "$INTTEST" || -p /dev/stdin ]]
+#then
+#	curl https://api.github.com/zen
+#	echo
+#fi
 
 
 
