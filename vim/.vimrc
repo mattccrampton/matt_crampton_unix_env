@@ -4,6 +4,9 @@
 "nnoremap <C-T>  <C-w><C-]><C-w>T
 "nmap <C-T> :TagbarToggle<CR>
 
+"nmap <C-[> :tabmp
+"nmap <C-]> :tabmn
+
 "set list
 set tags=tags;/
 "set tags=~/.vim/my_ctags/gigwalk
@@ -147,11 +150,14 @@ fixdel
 noremap <Space> <PageDown>
 noremap - <PageUp>
 
+
 noremap [ 3<C-Y>
 noremap ] 3<C-E>
 noremap ' 10zl
 noremap ; 10zh 
 
+map <C-j> :execute "tabmove" tabpagenr() - 2<CR>
+map <C-k> :execute "tabmove" tabpagenr()<CR>
 map j :tabp<CR><C-W><C-W>
 map k :tabn<CR><C-W><C-W>
 
