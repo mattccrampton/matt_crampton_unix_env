@@ -41,6 +41,7 @@ export SVN_EDITOR="/usr/bin/vim"
 
 #### ALIASES ###########################################
 alias unixEnv="cd ~/matt_crampton_unix_env"
+alias unix=unixEnv
 alias bin="cd ~/matt_crampton_unix_env/bin"
 alias ll=gnarleyDir
 alias dird=gnarleyListDirs
@@ -170,12 +171,12 @@ function watchPHPErrors
 
 function watchLogs
 {
-        sudo multitail  \
-        -I /var/log/auth.log  \
-        -I /var/log/daemon.log  \
-        -I /var/log/php5-fpm.log  \
-        -I /var/log/nginx/error.log  \
-        -I /var/log/syslog
+	sudo multitail  \
+	-I /var/log/auth.log  \
+	-I /var/log/daemon.log  \
+	-I /var/log/php5-fpm.log  \
+	-I /var/log/nginx/error.log  \
+	-I /var/log/syslog
 }
 
 
@@ -195,8 +196,28 @@ function gnarleyGrepCase
 
 function gnarleyGrep
 {
-	query=`echo $1 | sed -e "s| |\ |g"`
-	export LANG=C; find . -type f | egrep -vi "$GNARLEYGREPFILTER" | xargs grep -i "$query" 2>&1 | sed -e "s|\t||g" | egrep -v ".svn|No such file or directory|FreeBSD.6|Binary file"
+	#OLD 2013-9-23
+	#query=`echo $1 | sed -e "s| |\ |g"`
+	#export LANG=C; find . -type f | egrep -vi "$GNARLEYGREPFILTER" | xargs grep -i "$query" 2>&1 | sed -e "s|\t||g" | egrep -v ".svn|No such file or directory|FreeBSD.6|Binary file"
+
+	export LANG=C
+	QUERY=`echo $1 | sed -e "s| |\ |g"`
+	FILES="$(find -L . -type f)"
+	COLUMNS=$(tput cols)
+	echo "$FILES" | while read FILE; do
+		FILENAME=`echo $FILE | grep -vi "$GNARLEYGREPFILTER"`
+		if [ ! -z "$FILENAME" ]
+		then
+			RESULT=`grep -i "$QUERY" "$FILE"`
+			if [ ! -z "$RESULT" ]
+			then
+				while IFS= read -r line
+				do
+					echo "[$FILE] $line" | cut -c -$COLUMNS
+				done <<< "$RESULT"
+			fi
+		fi
+	done
 }
 
 function gnarleyGitPush
