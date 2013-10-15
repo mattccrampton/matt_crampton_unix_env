@@ -180,7 +180,7 @@ function watchLogs
 }
 
 
-export GNARLEYGREPFILTER="PHPPowerPoint|PHPExcel|aws-sdk|js-concat|css-min|js-min|.git|.svn|.jpg|.gif|.png|.swf|tags\'"
+export GNARLEYGREPFILTER="node_modules|PHPPowerPoint|PHPExcel|aws-sdk|js-concat|css-min|js-min|.git|.svn|.jpg|.gif|.png|.swf|tags\'"
 
 function gnarleyGrepC
 {
@@ -205,7 +205,7 @@ function gnarleyGrep
 	FILES="$(find -L . -type f)"
 	COLUMNS=$(tput cols)
 	echo "$FILES" | while read FILE; do
-		FILENAME=`echo $FILE | grep -vi "$GNARLEYGREPFILTER"`
+		FILENAME=`echo $FILE | egrep -vi "$GNARLEYGREPFILTER"`
 		if [ ! -z "$FILENAME" ]
 		then
 			RESULT=`grep -i "$QUERY" "$FILE"`
