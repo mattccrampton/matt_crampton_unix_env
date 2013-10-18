@@ -197,17 +197,22 @@ function gnarleyGrepCase
 function gnarleyGrep
 {
 	#OLD 2013-9-23
-	#query=`echo $1 | sed -e "s| |\ |g"`
-	#export LANG=C; find . -type f | egrep -vi "$GNARLEYGREPFILTER" | xargs grep -i "$query" 2>&1 | sed -e "s|\t||g" | egrep -v ".svn|No such file or directory|FreeBSD.6|Binary file"
+	query=`echo $1 | sed -e "s| |\ |g"`
+	export LANG=C; find . -type f | egrep -vi "$GNARLEYGREPFILTER" | xargs grep -i "$query" 2>&1 | sed -e "s|\t||g" | egrep -v ".svn|No such file or directory|FreeBSD.6|Binary file"
+}
 
+function gnarleyGrepOLD
+{
 	export LANG=C
 	QUERY=`echo $1 | sed -e "s| |\ |g"`
-	FILES="$(find -L . -type f)"
+	FILES="$(find . -type f)"
+	#FILES="$(find -L . -type f)"
 	COLUMNS=$(tput cols)
 	echo "$FILES" | while read FILE; do
 		FILENAME=`echo $FILE | egrep -vi "$GNARLEYGREPFILTER"`
 		if [ ! -z "$FILENAME" ]
 		then
+			#echo $FILENAME
 			RESULT=`grep -i "$QUERY" "$FILE"`
 			if [ ! -z "$RESULT" ]
 			then
