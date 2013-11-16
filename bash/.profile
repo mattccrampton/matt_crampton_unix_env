@@ -9,8 +9,6 @@ export HISTFILE=~/.bash_history
 export HISTSIZE=200000;
 export HISTCONTROL=erasedups
 shopt -s histappend
-PROMPT_COMMAND="history -a"
-#PROMPT_COMMAND="$PROMPT_COMMAND;history -a"
 export gnarleyHostName=`hostname | cut -d\.  -f1`
 
 
@@ -57,8 +55,9 @@ alias vi="vim -p"
 alias ci="vi"
 alias avn="svn"
 alias rm="rm -v"
-alias gnarleyFind="export LANG=C; find . | grep -v svn-base | grep -i $1"
 alias gnarleygrep="gnarleyGrep"
+alias killssh="sudo killall -9 ssh"
+alias killAllSSH=killssh
 
 
 if [ -x /usr/bin/dircolors ]; then
@@ -77,9 +76,41 @@ then
 	source ~/matt_crampton_private_unix_env/bash/.profile.PRIVATE
 fi
 
+# ADD GIT completion stuff
+if [ -f /usr/local/git/contrib/completion/git-completion.bash ]
+then
+	export GIT_PS1_SHOWDIRTYSTATE=1
+	export GIT_PS1_SHOWSTASHSTATE=1
+	export GIT_PS1_SHOWUNTRACKEDFILES=1
+	export GIT_PS1_SHOWUPSTREAM="auto"
+	source /usr/local/git/contrib/completion/git-completion.bash
+fi
+
 
 
 #### UTIL FUNCTIONS ####################################
+function gnarleyFind
+{
+	find . | grep -i "$1"
+	#alias gnarleyFind='export LANG=C; find . | grep -i "$1"'
+}
+
+function gitClean
+{
+	echo ""
+	echo "Are you sure you want to remove ALL changes?"
+	echo ">git reset --hard"
+	echo ">git clean -f -d"
+	echo "(y/N)"
+	read YESORNO;
+
+	if [ "$YESORNO" = "y" -o "$YESORNO" = "Y" ]
+	then
+		git reset --hard
+		git clean -f -d
+	fi
+}
+
 
 function gnarleyValidateJSON
 {
@@ -411,7 +442,61 @@ function gnarleyCtags
 	fi
 }
 
-export PS1="[\[\e[37;1m\]\u\[\e[31;1m\]@\[\e[37;1m\]$gnarleyHostName\[\e[0m\]]\[\e[32m\] \w/\[\e[0m\]"
+function gitPS1Help
+{
+	echo "--- Files ---"
+	echo " * unstaged"
+	echo " + staged"
+	echo " $ stashed"
+	echo " % untracked files"
+	echo "--- Repo ---"
+	echo " = latest"
+	echo " < indicates you are behind"
+	echo " > indicates you are ahead"
+	echo " <> deverged"
+}
+
+function generateGitBashData
+{
+	# * unstaged
+	# + staged
+	# $ stashed
+	# % untracked files
+	# < indicates you are behind
+	# > indicates you are ahead
+	# <> deverged
+
+	declare -f -F __git_ps1 > /dev/null
+	if [ $? -eq 0 ]
+	then
+		GITPS1="$(__git_ps1 "%s")"
+		if [[ -z "$GITPS1" ]]
+		then
+			echo ""
+		else
+			GITPS1="${GITPS1//master/M}"
+			GITPS1="${GITPS1//=/}"
+			GITPS1="${GITPS1// /}"
+			echo "|git:$GITPS1"
+		fi
+	else 
+		echo ""
+	fi
+}
+
+function setPromptCommand
+{
+	export PROMPT_COMMAND="setPS1; history -a"
+	#PROMPT_COMMAND="$PROMPT_COMMAND;history -a"
+}
+
+function setPS1
+{
+	export PS1="[\[\e[37;1m\]\u\[\e[31;1m\]@\[\e[37;1m\]$gnarleyHostName\[\e[0m\]`generateGitBashData`]\[\e[32m\] \w/\[\e[0m\]"
+}
+
+setPromptCommand
+setPS1
 
 unameString=`uname -a`
 
@@ -430,23 +515,6 @@ if command_exists tmux ; then
 	fi
 fi
 
-if command_exists screen ; then
-	if [ "$WINDOW" != "" ]; then
-		export PS1="[\[\e[37;1m\]\u\[\e[31;1m\]@\[\e[37;1m\]$gnarleyHostName:[SC:$WINDOW]\[\e[0m\]]\[\e[32m\] \w/\[\e[0m\]"
-	else
-		screenCheck=`screen -list | grep "No Sockets" > /dev/null; echo $?`
-		if [ "$screenCheck" == "1" ]; then
-			echo ""
-			echo "----------"
-			echo "There are open SCREEN sessions on this box..."
-			screen -list
-			echo "run 'screen -x' to re-attach"
-			echo "----------"
-			echo ""
-		fi
-	fi
-fi
-
 
 #Echos status to screen
 echo -n -e "\033]0;$gnarleyHostName\007"
@@ -459,4 +527,13 @@ echo -n -e "\033]0;$gnarleyHostName\007"
 #fi
 
 
+
+
+##
+# Your previous /Users/matt/.profile file was backed up as /Users/matt/.profile.macports-saved_2013-11-15_at_23:08:55
+##
+
+# MacPorts Installer addition on 2013-11-15_at_23:08:55: adding an appropriate PATH variable for use with MacPorts.
+export PATH=/opt/local/bin:/opt/local/sbin:$PATH
+# Finished adapting your PATH environment variable for use with MacPorts.
 
