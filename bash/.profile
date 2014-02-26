@@ -1,15 +1,40 @@
+function dash
+{
+	cd ~/gigwalk/apps/gigwalk-apps.python-app-server/gigwalk_app/dashboard_displays
+	vim -p tests/unit_tests.py views.py insights_controller.py data_controller.py
+}
 
+function dashp
+{
+	cd ~/gigwalk/apps/gigwalk-apps.python-app-server/gigwalk_app/dashboard_displays
+	vim -p views.py insights_controller.py data_controller.py $(find . -type f -name "*.py" ! -name "*.pyc" ! -name "__*.py" ! -name "*OLD*.py" | perl -e 'print sort{($p=$a)=~s!.*/!!;($q=$b)=~s!.*/!!;$p cmp$q}<>')
+}
+
+function dashh
+{
+	cd ~/gigwalk/apps/gigwalk-apps.python-app-server/gigwalk_app/dashboard_displays
+	vim -p $(find . -type f -name "*.html" ! -name "*.pyc" ! -name "__*.py" ! -name "*OLD*.py" | perl -e 'print sort{($p=$a)=~s!.*/!!;($q=$b)=~s!.*/!!;$p cmp$q}<>')
+}
+
+function css
+{
+	cd ~/gigwalk/apps/gigwalk-apps.python-app-server/gigwalk_app/static/css/
+	vim *.css
+}
 
 ##### SET BASH ENV VARS ################################
 #TERM=rxvt
-TERM=xterm-color
+#TERM=xterm-color
+TERM=xterm-256color
 #[[ $TERM == "screen" ]] && export -p TERM="screen-256color"
 umask 022
 export HISTFILE=~/.bash_history
 export HISTSIZE=200000;
-export HISTCONTROL=erasedups
+export HISTCONTROL=ignoreboth:erasedups
+
 shopt -s histappend
-export gnarleyHostName=`hostname | cut -d\.  -f1`
+#export gnarleyHostName=`hostname | cut -d\.  -f1`
+export gnarleyHostName="FBI"
 
 
 
@@ -44,6 +69,7 @@ alias bin="cd ~/matt_crampton_unix_env/bin"
 alias ll=gnarleyDir
 alias dird=gnarleyListDirs
 alias dir=gnarleyDir
+alias diur=gnarleyDir
 alias cls="clear"
 alias cd..="cd .."
 alias h="gnarleyHistory"
@@ -89,6 +115,13 @@ fi
 
 
 #### UTIL FUNCTIONS ####################################
+function vimrc
+{
+	cd ~/.vim
+	vi ~/.vimrc
+	cd -
+}
+
 function gnarleyFind
 {
 	find . | grep -i "$1"
@@ -219,42 +252,31 @@ function gnarleyGrepC
 	export LANG=C; find . -type f | egrep -vi "$GNARLEYGREPFILTER" | xargs grep -ci "$query" 2>&1  | egrep -v ".svn|No such file or directory|FreeBSD.6|\:0"
 }
 
-function gnarleyGrepCase
-{
-	query=`echo $1 | sed -e "s| |\ |g"`
-	export LANG=C; find . -type f | egrep -vi "$GNARLEYGREPFILTER" | xargs grep "$query" 2>&1 | sed -e "s|\t||g" | egrep -v ".svn|No such file or directory|FreeBSD.6|Binary file"
-}
-
 function gnarleyGrep
 {
-	#OLD 2013-9-23
 	query=`echo $1 | sed -e "s| |\ |g"`
-	export LANG=C; find . -type f | egrep -vi "$GNARLEYGREPFILTER" | xargs grep -i "$query" 2>&1 | sed -e "s|\t||g" | egrep -v ".svn|No such file or directory|FreeBSD.6|Binary file"
+	export LANG=C;
+	TCOLS=`tput cols`
+	#find . -type f | egrep -vi "$GNARLEYGREPFILTER" | xargs grep -i "$query" 2>&1 | sed -e "s|\t||g" | egrep -v ".svn|No such file or directory|FreeBSD.6|Binary file"
+
+	find . -type f \
+	-name "*" \
+	! -name "*.pyc" \
+	-not -path "*site-packages*" \
+	-not -path "*node_modules*" \
+	-not -path "*venv*" \
+	-not -path "*DataTables-1.9.4*" \
+	-not -path "*PHPPowerPoint*" \
+	-not -path "*PHPExcel*" \
+	-not -path "*aws-sdk*" \
+	-not -path "*js-concat*" \
+	-not -path "*css-min*" \
+	-not -path "*js-min*" \
+	-not -path "*.git*" \
+	-not -path "*.svn*" \
+	-exec grep -iH "$query" {} \; | sed -e "s|	||g" | sed -e "s|  ||g" | cut -c -$TCOLS
 }
 
-function gnarleyGrepOLD
-{
-	export LANG=C
-	QUERY=`echo $1 | sed -e "s| |\ |g"`
-	FILES="$(find . -type f)"
-	#FILES="$(find -L . -type f)"
-	COLUMNS=$(tput cols)
-	echo "$FILES" | while read FILE; do
-		FILENAME=`echo $FILE | egrep -vi "$GNARLEYGREPFILTER"`
-		if [ ! -z "$FILENAME" ]
-		then
-			#echo $FILENAME
-			RESULT=`grep -i "$QUERY" "$FILE"`
-			if [ ! -z "$RESULT" ]
-			then
-				while IFS= read -r line
-				do
-					echo "[$FILE] $line" | cut -c -$COLUMNS
-				done <<< "$RESULT"
-			fi
-		fi
-	done
-}
 
 function gnarleyGitPush
 {
@@ -416,18 +438,28 @@ function command_exists
 	type "$1" &> /dev/null ;
 }
 
+function clean
+{
+	cd ~/gigwalk/apps/gigwalk-apps.python-app-server
+	gnarleyDirClean
+	cd -
+}
+
 function gnarleyDirClean
 {
-	echo "Are you sure you want to delete ._* and .DS_Store files? (y/N)"
-	read cleanDIR;
+	#echo "Are you sure you want to delete ._* and .DS_Store files? (y/N)"
+	#read cleanDIR;
 
-	if [ "$cleanDIR" = "y" -o "$cleanDIR" = "Y" ]
-	then
-		find . -name "svn*.tmp" -print | xargs rm
-		find . -name "._*" -print | xargs rm
-		find . -name ".DS_Store" -print | xargs rm
-		echo "Done"
-	fi
+	#if [ "$cleanDIR" = "y" -o "$cleanDIR" = "Y" ]
+	#then
+	#fi
+
+	find . -type f -name 'svn*.tmp' -exec rm -f {} \;
+	find . -type f -name '._*' -exec rm -f {} \;
+	find . -type f -name '.DS_Store' -exec rm -f {} \;
+	find . -type f -name '*.pyc' -exec rm -f {} \;
+
+	echo "Done"
 }
 
 function gnarleyCtags
@@ -498,6 +530,9 @@ function setPromptCommand
 function setPS1
 {
 	export PS1="[\[\e[37;1m\]\u\[\e[31;1m\]@\[\e[37;1m\]$gnarleyHostName\[\e[0m\]`generateGitBashData`]\[\e[32m\] \w/\[\e[0m\]"
+	if [ -n "$VIRTUAL_ENV" ]; then
+		export PS1="[\[\e[37;1m\]\u\[\e[31;1m\]@\[\e[37;1m\]$gnarleyHostName\[\e[0m\]`generateGitBashData`|\[\e[31;1m\]VENV\[\e[37;1m\]]\[\e[32m\] \w/\[\e[0m\]"
+	fi
 }
 
 setPromptCommand
