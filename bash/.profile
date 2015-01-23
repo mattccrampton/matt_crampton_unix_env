@@ -61,6 +61,7 @@ alias rm="rm -v"
 alias gnarleygrep="gnarleyGrep"
 alias killssh="sudo killall -9 ssh"
 alias killAllSSH=killssh
+alias gigwalk=gigwalkCD
 
 alias .='pwd'
 alias ..='cd ..'
@@ -442,6 +443,21 @@ function clean
 	gnarleyDirClean
 	cd -
 }
+
+function gigwalkCD
+{
+	unameString=`uname -a`
+
+	if [[ $unameString != *Darwin* ]]
+	then
+		export PATH_TO_CODE=`readlink -f /etc/security/limits.conf`
+		export PATH_TO_TARGET=`dirname ${PATH_TO_CODE}`
+		cd ${PATH_TO_TARGET}/../../web/$1
+	else
+		cd ~/gigwalk/trunk/web
+	fi
+}
+
 
 function gnarleyDirClean
 {
