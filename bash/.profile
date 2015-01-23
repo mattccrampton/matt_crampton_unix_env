@@ -1,27 +1,3 @@
-function dash
-{
-	cd ~/gigwalk/apps/gigwalk-apps.python-app-server/gigwalk_app/dashboard_displays
-	vim -p tests/unit_tests.py views.py insights_controller.py data_controller.py
-}
-
-function dashp
-{
-	cd ~/gigwalk/apps/gigwalk-apps.python-app-server/gigwalk_app/dashboard_displays
-	vim -p views.py insights_controller.py data_controller.py $(find . -type f -name "*.py" ! -name "*.pyc" ! -name "__*.py" ! -name "*OLD*.py" | perl -e 'print sort{($p=$a)=~s!.*/!!;($q=$b)=~s!.*/!!;$p cmp$q}<>')
-}
-
-function dashh
-{
-	cd ~/gigwalk/apps/gigwalk-apps.python-app-server/gigwalk_app/dashboard_displays
-	vim -p $(find . -type f -name "*.html" ! -name "*.pyc" ! -name "__*.py" ! -name "*OLD*.py" | perl -e 'print sort{($p=$a)=~s!.*/!!;($q=$b)=~s!.*/!!;$p cmp$q}<>')
-}
-
-function css
-{
-	cd ~/gigwalk/apps/gigwalk-apps.python-app-server/gigwalk_app/static/css/
-	vim *.css
-}
-
 ##### SET BASH ENV VARS ################################
 #TERM=rxvt
 #TERM=xterm-color
@@ -34,7 +10,7 @@ export HISTCONTROL=ignoreboth:erasedups
 
 shopt -s histappend
 #export gnarleyHostName=`hostname | cut -d\.  -f1`
-export gnarleyHostName="FBI"
+export gnarleyHostName="MLT"
 
 
 
@@ -67,6 +43,7 @@ alias unixEnv="cd ~/matt_crampton_unix_env"
 alias unix=unixEnv
 alias bin="cd ~/matt_crampton_unix_env/bin"
 alias ll=gnarleyDir
+alias dirs="ls -alFSr"
 alias dird=gnarleyListDirs
 alias dir=gnarleyDir
 alias diur=gnarleyDir
@@ -84,6 +61,12 @@ alias rm="rm -v"
 alias gnarleygrep="gnarleyGrep"
 alias killssh="sudo killall -9 ssh"
 alias killAllSSH=killssh
+
+alias .='pwd'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+
 
 
 if [ -x /usr/bin/dircolors ]; then
@@ -273,6 +256,14 @@ function gnarleyGrep
 	-not -path "*css-min*" \
 	-not -path "*js-min*" \
 	-not -path "*.git*" \
+	-not -path "*.png*" \
+	-not -path "*.gif*" \
+	-not -path "*.jpg*" \
+	-not -path "*.avi*" \
+	-not -path "*.mp3*" \
+	-not -path "*.mov*" \
+	-not -path "*.zip*" \
+	-not -path "*core_dump*" \
 	-not -path "*.svn*" \
 	-exec grep -iH "$query" {} \; | sed -e "s|	||g" | sed -e "s|  ||g" | cut -c -$TCOLS
 }
@@ -332,6 +323,13 @@ function gnarleyGitPublicStatus
 	cd -
 }
 
+alias ge=gnarleyEdit
+function sourceAll
+{
+	clear
+	source ~/matt_crampton_unix_env/bash/.profile
+	source ~/matt_crampton_private_unix_env/bash/.profile.PRIVATE
+}
 function gnarleyEdit
 {
 	if [ -f ~/matt_crampton_private_unix_env/bash/.profile.PRIVATE ]
@@ -406,7 +404,7 @@ function gnarleyDir
 	dirCommand=""
 	if [ "$OSTYPE" = "linux-gnu" ] ; then
 		dirCommand="ls -AlFh --color=always"
-	elif [ "$OSTYPE" = "darwin12" ] ; then
+	elif [[ "$OSTYPE" == *"darwin"* ]] ; then
 		dirCommand="ls -AlFhG"
 	else
 		dirCommand="ls -AlFh"
@@ -440,7 +438,7 @@ function command_exists
 
 function clean
 {
-	cd ~/gigwalk/apps/gigwalk-apps.python-app-server
+	cd ~/gigwalk/apps/gigwalk_apps_platform
 	gnarleyDirClean
 	cd -
 }
@@ -458,6 +456,7 @@ function gnarleyDirClean
 	find . -type f -name '._*' -exec rm -f {} \;
 	find . -type f -name '.DS_Store' -exec rm -f {} \;
 	find . -type f -name '*.pyc' -exec rm -f {} \;
+	find . -type f -name '*.*~' -exec rm -f {} \;
 
 	echo "Done"
 }
@@ -491,6 +490,39 @@ function gitPS1Help
 	echo " < indicates you are behind"
 	echo " > indicates you are ahead"
 	echo " <> deverged"
+}
+
+function generatePrettyPath
+{
+	#FULL_PATH=`pwd`
+	FULL_PATH=`pwd | cut -d\/ -f4-`
+	TRUNC_FULL_PATH=`echo $FULL_PATH | tail -c 40`
+	if [ "$FULL_PATH" == "$TRUNC_FULL_PATH" ]; then
+		DISPLAY_PATH="~/${FULL_PATH}"
+	else
+		#DISPLAY_PATH="...${TRUNC_FULL_PATH}"
+		DISPLAY_PATH="~"
+		array=(${FULL_PATH//\// })
+		for i in "${!array[@]}"
+		do
+			INDEX=$((i+1))
+			if [ "$INDEX" == "${#array[@]}" ]; then
+				DISPLAY_PATH="$DISPLAY_PATH/${array[i]}"
+			else
+				if (( ${#array[i]} <= 7 )) ; then
+					#echo "${#array[i]} true"
+					DISPLAY_PATH="$DISPLAY_PATH/${array[i]}"
+				else
+					#echo "${#array[i]} false"
+					FIRST=`echo ${array[i]} | head -c 1`
+					LAST=`echo ${array[i]} | tail -c 2`
+					TRUNC="[${FIRST}.${LAST}]"
+					DISPLAY_PATH="$DISPLAY_PATH/${TRUNC}"
+				fi
+			fi
+		done
+	fi
+	echo $DISPLAY_PATH
 }
 
 function generateGitBashData
@@ -532,6 +564,13 @@ function setPS1
 	export PS1="[\[\e[37;1m\]\u\[\e[31;1m\]@\[\e[37;1m\]$gnarleyHostName\[\e[0m\]`generateGitBashData`]\[\e[32m\] \w/\[\e[0m\]"
 	if [ -n "$VIRTUAL_ENV" ]; then
 		export PS1="[\[\e[37;1m\]\u\[\e[31;1m\]@\[\e[37;1m\]$gnarleyHostName\[\e[0m\]`generateGitBashData`|\[\e[31;1m\]VENV\[\e[37;1m\]]\[\e[32m\] \w/\[\e[0m\]"
+	fi
+}
+function setPS1_PRETTY
+{
+	export PS1="[\[\e[37;1m\]\u\[\e[31;1m\]@\[\e[37;1m\]$gnarleyHostName\[\e[0m\]`generateGitBashData`]\[\e[32m\] `generatePrettyPath`/\[\e[0m\]"
+	if [ -n "$VIRTUAL_ENV" ]; then
+		export PS1="[\[\e[37;1m\]\u\[\e[31;1m\]@\[\e[37;1m\]$gnarleyHostName\[\e[0m\]`generateGitBashData`|\[\e[31;1m\]VENV\[\e[37;1m\]]\[\e[32m\] `generatePrettyPath`/\[\e[0m\]"
 	fi
 }
 

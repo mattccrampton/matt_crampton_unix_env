@@ -1,4 +1,22 @@
 
+
+
+
+
+
+
+
+
+
+set backupdir=~/.vim/backup_files//
+set directory=~/.vim/swap_files//
+set undodir=~/.vim/undo_files//
+
+
+
+set undodir=/tmp
+set undofile
+
 "https://github.com/fholgado/minibufexpl.vim/blob/master/doc/minibufexpl.txt
 "let g:miniBufExplVSplit = 35
 "let g:miniBufExplorerAutoStart = 1
@@ -22,7 +40,6 @@ map j :tabp<CR><C-W><C-W>
 map k :tabn<CR><C-W><C-W>
 
 
-
 "map ,o kkkkkkkkkkkkkkkkkk:e .<CR>
 "map ,o :MBEOpen<CR>kkkkkkkkkk:e .<CR>
 "map ,v kkkkkkkkkkkkkkkkkk:e ~/.vimrc<CR>:so $MYVIMRC<CR>:MBEToggle<CR>:MBEToggle<CR>
@@ -41,7 +58,9 @@ let g:netrw_list_hide= '.*\.pyc$'
 "let g:netrw_liststyle= 3
 "let g:netrw_browse_split=3
 
-colorscheme jelleybeans
+"colorscheme jelleybeans
+"colorscheme blackboard
+colorscheme pychimp
 
 "http://www.vim.org/scripts/script.php?script_id=42
 let g:bufExplorerDefaultHelp=1
@@ -116,7 +135,7 @@ set statusline+=%=      "left/right separator
 set statusline+=%1*  "switch to User1 highlight
 set statusline+=[
 "set statusline+=%-0.50{@0}
-set statusline+=%-.40{GnarleyGetUnnamedRegister()}
+set statusline+=%-.40{GnarleyGetRegisterA()}
 set statusline+=]
 
 set statusline+=%3*  "switch to User3 highlight
@@ -307,6 +326,16 @@ map <C-o> :tabe<CR>:CtrlP getcwd()<CR>
 "hi StatusLineNC cterm=NONE ctermbg=black ctermfg=black 
 "	\ gui=bold guibg=#060606 guifg=black 
 
+
+function GnarleyGetRegisterA()
+	let l = substitute(@a, '\n', '', 'g')
+	let l = substitute(l, '\t', '', 'g')
+	let l = substitute(l, '\r', '', 'g')
+	if strlen(l) < 40
+		return l
+	endif
+	return strpart(l, 0, 39) . ">"
+endfunction
 
 function GnarleyGetUnnamedRegister()
 	let l = substitute(@0, '\n', '', 'g')
