@@ -10,6 +10,7 @@ export HISTCONTROL=ignoreboth:erasedups
 
 shopt -s histappend
 #export gnarleyHostName=`hostname | cut -d\.  -f1`
+export this_is_a_prod_machine=true
 export gnarleyHostName="MLT"
 
 
@@ -571,8 +572,21 @@ function generateGitBashData
 
 function setPromptCommand
 {
-	export PROMPT_COMMAND="setPS1; history -a"
-	#PROMPT_COMMAND="$PROMPT_COMMAND;history -a"
+	if [ "$this_is_a_prod_machine" = true ] ; then
+		export PROMPT_COMMAND="setPS1_PROD; history -a"
+		#PROMPT_COMMAND="$PROMPT_COMMAND;history -a"
+	else
+		export PROMPT_COMMAND="setPS1; history -a"
+	fi
+}
+
+function setPS1_PROD
+{
+	# \e[7m does an invert color
+	export PS1="[\e[7m\[\e[37;1m\]\u\[\e[31;1m\]@\[\e[37;1m\]$gnarleyHostName\[\e[0m\]`generateGitBashData`]\[\e[32m\] \w/\[\e[0m\]"
+	if [ -n "$VIRTUAL_ENV" ]; then
+		export PS1="[\e[7m\[\e[37;1m\]\u\[\e[31;1m\]@\[\e[37;1m\]$gnarleyHostName\[\e[0m\]`generateGitBashData`|\[\e[31;1m\]VENV\[\e[37;1m\]]\[\e[32m\] \w/\[\e[0m\]"
+	fi
 }
 
 function setPS1
@@ -591,7 +605,7 @@ function setPS1_PRETTY
 }
 
 setPromptCommand
-setPS1
+#setPS1
 
 unameString=`uname -a`
 
