@@ -12,7 +12,7 @@ export EDITOR=/usr/local/bin/vim
 shopt -s histappend
 #export gnarleyHostName=`hostname | cut -d\.  -f1`
 export this_is_a_prod_machine=false
-export gnarleyHostName="MLT"
+export gnarleyHostName="BLANK_VM"
 
 
 
@@ -623,7 +623,7 @@ unameString=`uname -a`
 ## DOES TMUX AND SCREEN CHECKING #############################
 if command_exists tmux ; then
 	if [ ! -n "$TMUX" ]; then
-		if [ `tmux list-sessions | wc -l` -gt 0 ]; then	
+		if [ `tmux list-sessions 2>&1 | grep -v "no server running" | wc -l` -gt 0 ]; then	
 			echo ""
 			echo "----------"
 			echo "There are open TMUX sessions on this box..."
