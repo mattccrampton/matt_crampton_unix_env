@@ -1,21 +1,61 @@
-
-
-
-
-
-
-
-
-
+" 2-16-2-10: need to figure this out: https://github.com/davidhalter/jedi-vim/blob/master/doc/jedi-vim.txt
+" https://github.com/tpope/vim-pathogen
+execute pathogen#infect()
+filetype plugin indent on
 
 set backupdir=~/.vim/backup_files//
 set directory=~/.vim/swap_files//
 set undodir=~/.vim/undo_files//
-
-
-
 set undodir=/tmp
 set undofile
+
+""" https://github.com/wincent/command-t/blob/master/doc/command-t.txt
+let g:CommandTMaxHeight=0
+let g:CommandTTraverseSCM='pwd'
+let g:CommandTMinHeight=15
+let g:CommandTAlwaysShowDotFiles=1
+"let g:CommandTCursorColor='red'
+let g:CommandTAcceptSelectionCommand='tabe'
+
+
+""" https://github.com/scrooloose/nerdtree
+let g:NERDTreeDirArrowExpandable = '>'
+let g:NERDTreeDirArrowCollapsible = 'v'
+"let NERDTreeMapOpenInTab='\r'
+let g:nerdtree_tabs_synchronize_view=1
+let NERDTreeShowHidden=1
+let g:NERDTreeWinSize=25
+
+
+""" https://github.com/jistr/vim-nerdtree-tabs
+let g:nerdtree_tabs_open_on_console_startup=1
+let g:nerdtree_tabs_autofind=1
+let g:nerdtree_tabs_smart_startup_focus=2
+let g:nerdtree_tabs_focus_on_files=1
+
+
+""" https://github.com/Xuyuanp/nerdtree-git-plugin
+let g:NERDTreeIndicatorMapCustom = {
+    \ "Modified"  : "*",
+    \ "Staged"    : "+",
+    \ "Untracked" : "@",
+    \ "Renamed"   : ">",
+    \ "Unmerged"  : "=",
+    \ "Deleted"   : "x",
+    \ "Dirty"     : "X",
+    \ "Clean"     : "C",
+    \ "Unknown"   : "?"
+    \ }
+
+
+""" https://github.com/scrooloose/nerdcommenter
+map # \c<space><Down>
+map ,# yyp#<UP><UP>
+
+""" https://github.com/airblade/vim-gitgutter
+let g:gitgutter_map_keys = 0
+set updatetime=250
+let g:gitgutter_sign_column_always=1
 
 "https://github.com/fholgado/minibufexpl.vim/blob/master/doc/minibufexpl.txt
 "let g:miniBufExplVSplit = 35
@@ -36,8 +76,10 @@ set undofile
 "map k :MBEbn<CR><C-W><C-W>
 "map j :bp<CR>
 "map k :bn<CR>
-map j :tabp<CR><C-W><C-W>
-map k :tabn<CR><C-W><C-W>
+"map j :tabp<CR><C-W><C-W>
+"map k :tabn<CR><C-W><C-W>
+map j :tabp<CR>
+map k :tabn<CR>
 
 
 "map ,o kkkkkkkkkkkkkkkkkk:e .<CR>
@@ -75,16 +117,17 @@ set hidden
 "set list
 set tags=tags;/
 "set tags=~/.vim/my_ctags/gigwalk
-set listchars=tab:>.
+"set listchars=tab:>.*/
 "set listchars=tab:>.,trail:.,extends:#,nbsp:.
-set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:<
-
+"set listchars=tab:>-     " > is shown at the beginning, - throughout*/
+set listchars=eol:$,tab:>-,trail:~
 
 set scrolloff=1
 "set scrolloff=10
 "set scrolloff=999
 
 set wildmode=list:longest,full
+set wildignore+=*.o,*.pyc,*venv/*,*vendor_BACKUP/*,*vendor_custom/*,*vendor/*,*node_modules/*
 "set wildmode=list
 set virtualedit=all
 set tabpagemax=50
@@ -109,8 +152,8 @@ set history=50
 "set mouse=a
 
 " display the current mode and partially-typed commands in the status line:
-"set showmode
-"set showcmd
+set showmode
+set showcmd
 "set notimeout
 "set timeoutlen=100
 
@@ -167,14 +210,24 @@ filetype indent on
 " for CSS, also have things in braces indented:
 autocmd FileType css set smartindent
 
+""" TAB SETTINGS """
+
 " for both CSS and HTML, use genuine tab characters for indentation, to make
 " files a few bytes smaller:
-autocmd FileType html,css,htm,xsl,php,inc,js,txt,java, set noexpandtab tabstop=5 shiftwidth=5 smartindent
+"autocmd FileType html,css,htm,xsl,php,inc,js,txt,java, set noexpandtab tabstop=5 shiftwidth=5 smartindent
 
 " in makefiles, don't expand tabs to spaces, since actual tab characters are
 " needed, and have indentation at 8 chars to be sure that all indents are tabs
 " (despite the mappings later):
-autocmd FileType make set noexpandtab shiftwidth=5
+"autocmd FileType make set noexpandtab shiftwidth=5
+
+"set expandtab
+"set shiftwidth=2
+"set softtabstop=2
+"set noexpandtab
+"set tabstop=4
+
+set autoindent noexpandtab tabstop=4 shiftwidth=4
 
 "format ejs files
 au BufNewFile,BufRead *.ejs set filetype=html
@@ -218,6 +271,10 @@ set wildmenu
 
 
 """""" Keyboard Mappings """""""
+"yank to osx clipboard
+map ,y "+Y
+"paste from osx clipboard
+map ,p "+P
 map <Enter> O<ESC><ESC><Down>
 "map <Enter> I<CR><ESC>
 noremap \\ :%s:::c<Left><Left><Left>
@@ -227,9 +284,10 @@ fixdel
 noremap <Space> <PageDown>
 noremap - <PageUp>
 
-
-noremap [ 3<C-Y>
-noremap ] 3<C-E>
+" 2016-2-10: I had to rename  /usr/local/Cellar/vim/7.4.891/share/vim/vim74/ftplugin.vim to ftplugin.vim.2016-2-10 to 
+" get around that plugin using the [ and ] bindings.
+noremap [ 1<C-Y>
+noremap ] 1<C-E>
 noremap ' 10zl
 noremap ; 10zh 
 
@@ -264,7 +322,6 @@ map M z.
 
 
 
-
 vmap <space> zf
 "function GnarleyTest1(theString)
 "	echo "This is gnarleyTest1"
@@ -295,12 +352,13 @@ vmap <space> zf
 map ,pm :call GnarleyPHPManual()<CR>
 
 set pastetoggle=<C-P> " Ctrl-P toggles paste mode
-"map ,o :tabe<CR>:tabm 0<CR>:Ex<CR>
-map ,o :tabe<CR>:tabm 9<CR>:Ex<CR>:tabm +1<CR>
-"map ,o :Ex<CR>
-"map ,o :e .<CR>:1bw!<CR>
 
-nmap t <C-w><C-]><C-w>T
+"trying nerdtree 2016-3-14
+"map ,o :tabe<CR>:tabm 9<CR>:Ex<CR>:tabm +1<CR>
+"map ,o :NERDTreeToggle<CR>
+map ,o :tabe<CR>:tabm 9<CR>:NERDTreeFocusToggle<CR>
+
+"nmap t <C-w><C-]><C-w>T
 "nnoremap <silent> ,t :TlistToggle<CR>
 
 map R :registers<CR>

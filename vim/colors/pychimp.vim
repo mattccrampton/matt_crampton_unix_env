@@ -59,9 +59,10 @@ hi Search      ctermfg=253  ctermbg=66    cterm=NONE
 hi IncSearch   ctermfg=253  ctermbg=66    cterm=NONE
 hi TabLine     ctermfg=255    ctermbg=235  cterm=NONE
 "hi TabLine     ctermfg=3    ctermbg=NONE  cterm=NONE
-hi TabLineSel  ctermfg=226   ctermbg=NONE  cterm=bold
-"hi TabLineFill ctermfg=46   ctermbg=NONE  cterm=NONE
-hi TabLineFill ctermfg=46   ctermbg=235  cterm=NONE
+hi TabLineSel  ctermfg=0   ctermbg=226  cterm=bold
+"hi TabLineSel  ctermfg=226   ctermbg=NONE  cterm=bold
+hi TabLineFill ctermfg=46   ctermbg=NONE  cterm=NONE
+"hi TabLineFill ctermfg=46   ctermbg=235  cterm=NONE
 
 " End of Colour scheme ! (Pretty small !:) )
 " Will add support for more languages eventually. !

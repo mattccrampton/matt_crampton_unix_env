@@ -7,30 +7,32 @@ umask 022
 export HISTFILE=~/.bash_history
 export HISTSIZE=200000;
 export HISTCONTROL=ignoreboth:erasedups
+export EDITOR=/usr/local/bin/vim
 
 shopt -s histappend
 #export gnarleyHostName=`hostname | cut -d\.  -f1`
-export this_is_a_prod_machine=true
+export this_is_a_prod_machine=false
 export gnarleyHostName="MLT"
 
 
 
 ##### SET PATH #########################################
 export PATH=$HOME
+export PATH=$PATH:/usr/local/bin
+export PATH=$PATH:/usr/local/sbin
+export PATH=$PATH:/usr/local/git/bin
 export PATH=$PATH:/bin
 export PATH=$PATH:/sbin
 export PATH=$PATH:/usr/bin
 export PATH=$PATH:/usr/sbin
 export PATH=$PATH:/usr/X11R6/bin
-export PATH=$PATH:/usr/local/bin
-export PATH=$PATH:/usr/local/sbin
-export PATH=$PATH:/usr/local/git/bin
 export PATH=$PATH:/opt/vim/bin
 export PATH=$PATH:/opt/local/bin
 export PATH=$PATH:/opt/local/sbin
 export PATH=$PATH:$HOME/bin
 export PATH=$PATH:$HOME/matt_crampton_unix_env/bin
 export PATH=$PATH:/Library/Frameworks/Python.framework/Versions/2.7/bin
+export PATH=$PATH:/usr/local/go/bin
 
 
 export MANPATH=$MANPATH:/usr/share/man
@@ -47,6 +49,7 @@ alias ll=gnarleyDir
 alias dirs="ls -alFSr"
 alias dird=gnarleyListDirs
 alias dir=gnarleyDir
+alias ir=gnarleyDir
 alias diur=gnarleyDir
 alias cls="clear"
 alias cd..="cd .."
@@ -58,11 +61,13 @@ alias mv="mv -v"
 alias vi="vim -p"
 alias ci="vi"
 alias avn="svn"
-alias rm="rm -v"
+#alias rm="rm -v"
 alias gnarleygrep="gnarleyGrep"
 alias killssh="sudo killall -9 ssh"
 alias killAllSSH=killssh
-alias gigwalk=gigwalkCD
+alias gigwalk="cd /Volumes/GNARLEY_DB/projects/gigwalk_project/"
+alias desktop="cd ~/Desktop/"
+#alias gigwalk=gigwalkCD
 
 alias .='pwd'
 alias ..='cd ..'
@@ -100,6 +105,11 @@ fi
 
 
 #### UTIL FUNCTIONS ####################################
+function pcopy
+{
+	pwd | pbcopy
+}
+
 function vimrc
 {
 	cd ~/.vim
@@ -264,6 +274,7 @@ function gnarleyGrep
 	-not -path "*.avi*" \
 	-not -path "*.mp3*" \
 	-not -path "*.mov*" \
+	-not -path "*.pyc*" \
 	-not -path "*.zip*" \
 	-not -path "*core_dump*" \
 	-not -path "*.svn*" \
