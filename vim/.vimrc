@@ -274,7 +274,10 @@ set wildmenu
 "yank to osx clipboard
 map ,y "+Y
 "paste from osx clipboard
-map ,p "+P
+"map ,p "+P
+"map ,p <ESC><ESC>:set paste<Enter>i
+"set pastetoggle=,p
+
 map <Enter> O<ESC><ESC><Down>
 "map <Enter> I<CR><ESC>
 noremap \\ :%s:::c<Left><Left><Left>
@@ -349,14 +352,14 @@ vmap <space> zf
 
 
 """""" Start custom function stuff """"""""""""""""
-map ,pm :call GnarleyPHPManual()<CR>
+"map ,pm :call GnarleyPHPManual()<CR>
 
 set pastetoggle=<C-P> " Ctrl-P toggles paste mode
 
 "trying nerdtree 2016-3-14
-"map ,o :tabe<CR>:tabm 9<CR>:Ex<CR>:tabm +1<CR>
+map ,o :tabe<CR>:tabm 9<CR>:Ex<CR>:tabm +1<CR>
 "map ,o :NERDTreeToggle<CR>
-map ,o :tabe<CR>:tabm 9<CR>:NERDTreeFocusToggle<CR>
+"map ,o :tabe<CR>:tabm 9<CR>:NERDTreeFocusToggle<CR>
 
 "nmap t <C-w><C-]><C-w>T
 "nnoremap <silent> ,t :TlistToggle<CR>

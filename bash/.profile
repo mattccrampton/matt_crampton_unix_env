@@ -12,7 +12,7 @@ export EDITOR=/usr/local/bin/vim
 shopt -s histappend
 #export gnarleyHostName=`hostname | cut -d\.  -f1`
 export this_is_a_prod_machine=false
-export gnarleyHostName="BLANK_VM"
+export gnarleyHostName="AUT_DEV_VM"
 
 
 
@@ -33,6 +33,7 @@ export PATH=$PATH:$HOME/bin
 export PATH=$PATH:$HOME/matt_crampton_unix_env/bin
 export PATH=$PATH:/Library/Frameworks/Python.framework/Versions/2.7/bin
 export PATH=$PATH:/usr/local/go/bin
+export PATH=$PATH:$HOME/.local/bin
 
 
 export MANPATH=$MANPATH:/usr/share/man
@@ -52,9 +53,9 @@ alias dir=gnarleyDir
 alias ir=gnarleyDir
 alias diur=gnarleyDir
 alias cls="clear"
+alias c="clear"
 alias cd..="cd .."
 alias h="gnarleyHistory"
-alias c="cd"
 alias d="cd"
 alias cp="cp -v"
 alias mv="mv -v"
@@ -623,7 +624,7 @@ unameString=`uname -a`
 ## DOES TMUX AND SCREEN CHECKING #############################
 if command_exists tmux ; then
 	if [ ! -n "$TMUX" ]; then
-		if [ `tmux list-sessions 2>&1 | grep -v "no server running" | wc -l` -gt 0 ]; then	
+		if [ `tmux list-sessions 2>&1 | grep -v "error" |  grep -v "no server running" | wc -l` -gt 0 ]; then	
 			echo ""
 			echo "----------"
 			echo "There are open TMUX sessions on this box..."
