@@ -115,7 +115,7 @@ set hidden
 
 
 "set list
-set tags=tags;/
+"set tags=tags;/
 "set tags=~/.vim/my_ctags/gigwalk
 "set listchars=tab:>.*/
 "set listchars=tab:>.,trail:.,extends:#,nbsp:.
@@ -289,6 +289,8 @@ noremap - <PageUp>
 
 " 2016-2-10: I had to rename  /usr/local/Cellar/vim/7.4.891/share/vim/vim74/ftplugin.vim to ftplugin.vim.2016-2-10 to 
 " get around that plugin using the [ and ] bindings.
+" 2017-4-21 needed to nuke 4 lines from /usr/share/vim/vim74/ftplugin/python.vim to nuke the key bindings on mac
+" plus I had to turn off the mac restrictions on editing /usr files first.
 noremap [ 1<C-Y>
 noremap ] 1<C-E>
 noremap ' 10zl

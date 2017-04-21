@@ -12,7 +12,7 @@ export EDITOR=/usr/local/bin/vim
 shopt -s histappend
 #export gnarleyHostName=`hostname | cut -d\.  -f1`
 export this_is_a_prod_machine=false
-export gnarleyHostName="AUT_DEV_VM"
+export gnarleyHostName="FBI_2017"
 
 
 
@@ -32,6 +32,7 @@ export PATH=$PATH:/opt/local/sbin
 export PATH=$PATH:$HOME/bin
 export PATH=$PATH:$HOME/matt_crampton_unix_env/bin
 export PATH=$PATH:/Library/Frameworks/Python.framework/Versions/2.7/bin
+export PATH=$PATH:$HOME/Library/Python/2.7/bin
 export PATH=$PATH:/usr/local/go/bin
 export PATH=$PATH:$HOME/.local/bin
 
