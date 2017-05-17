@@ -1,6 +1,6 @@
 " 2-16-2-10: need to figure this out: https://github.com/davidhalter/jedi-vim/blob/master/doc/jedi-vim.txt
 " https://github.com/tpope/vim-pathogen
-execute pathogen#infect()
+" execute pathogen#infect()
 filetype plugin indent on
 
 set backupdir=~/.vim/backup_files//
@@ -78,8 +78,8 @@ let g:gitgutter_sign_column_always=1
 "map k :bn<CR>
 "map j :tabp<CR><C-W><C-W>
 "map k :tabn<CR><C-W><C-W>
-map j :tabp<CR>
-map k :tabn<CR>
+"map j :tabp<CR>
+"map k :tabn<CR>
 
 
 "map ,o kkkkkkkkkkkkkkkkkk:e .<CR>
@@ -102,7 +102,7 @@ let g:netrw_list_hide= '.*\.pyc$'
 
 "colorscheme jelleybeans
 "colorscheme blackboard
-colorscheme pychimp
+" colorscheme pychimp
 
 "http://www.vim.org/scripts/script.php?script_id=42
 let g:bufExplorerDefaultHelp=1
@@ -115,12 +115,13 @@ set hidden
 
 
 "set list
-set tags=tags;/
+"set tags=tags;/
 "set tags=~/.vim/my_ctags/gigwalk
 "set listchars=tab:>.*/
 "set listchars=tab:>.,trail:.,extends:#,nbsp:.
 "set listchars=tab:>-     " > is shown at the beginning, - throughout*/
-set listchars=eol:$,tab:>-,trail:~
+"set listchars=eol:$,tab:>-,trail:~ " pre-2017-2-3
+set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:<,space:.
 
 set scrolloff=1
 "set scrolloff=10
@@ -227,7 +228,11 @@ autocmd FileType css set smartindent
 "set noexpandtab
 "set tabstop=4
 
-set autoindent noexpandtab tabstop=4 shiftwidth=4
+" USE THIS FOR TABS...
+"set autoindent noexpandtab tabstop=4 shiftwidth=4
+
+" USE THIS FOR SPACES...
+set tabstop=2 shiftwidth=2 expandtab
 
 "format ejs files
 au BufNewFile,BufRead *.ejs set filetype=html
@@ -275,7 +280,7 @@ set wildmenu
 map ,y "+Y
 "paste from osx clipboard
 "map ,p "+P
-"map ,p <ESC><ESC>:set paste<Enter>i
+map ,p <ESC><ESC>:set paste<Enter>
 "set pastetoggle=,p
 
 map <Enter> O<ESC><ESC><Down>
@@ -287,13 +292,24 @@ fixdel
 noremap <Space> <PageDown>
 noremap - <PageUp>
 
-" 2016-2-10: I had to rename  /usr/local/Cellar/vim/7.4.891/share/vim/vim74/ftplugin.vim to ftplugin.vim.2016-2-10 to 
-" get around that plugin using the [ and ] bindings.
+""" Move Vertically
 noremap [ 1<C-Y>
 noremap ] 1<C-E>
+"map j 1<C-Y>
+"map k 1<C-E>
+
+""" Move Horizontally
 noremap ' 10zl
 noremap ; 10zh 
 
+""" Switch Tabs
+map j :tabp<CR>
+map k :tabn<CR>
+"map <C-j> :tabp<CR>
+"map <C-k> :tabn<CR>
+
+
+""" Move tab placement
 map <C-j> :tabm -1<CR>
 map <C-k> :tabm +1<CR>
 "map j :tabp<CR><C-W><C-W>

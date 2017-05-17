@@ -7,12 +7,13 @@ umask 022
 export HISTFILE=~/.bash_history
 export HISTSIZE=200000;
 export HISTCONTROL=ignoreboth:erasedups
-export EDITOR=/usr/local/bin/vim
+export EDITOR=/usr/bin/vim
+#export EDITOR=/usr/local/bin/vim
 
 shopt -s histappend
 #export gnarleyHostName=`hostname | cut -d\.  -f1`
 export this_is_a_prod_machine=false
-export gnarleyHostName="AUT_DEV_VM"
+export gnarleyHostName="AUT_DEV_VM_v2"
 
 
 
@@ -481,11 +482,11 @@ function gnarleyDirClean
 	#then
 	#fi
 
-	find . -type f -name 'svn*.tmp' -exec rm -f {} \;
-	find . -type f -name '._*' -exec rm -f {} \;
-	find . -type f -name '.DS_Store' -exec rm -f {} \;
-	find . -type f -name '*.pyc' -exec rm -f {} \;
-	find . -type f -name '*.*~' -exec rm -f {} \;
+	find . -type f -name 'svn*.tmp' -exec rm -vf {} \;
+	find . -type f -name '._*' -exec rm -vf {} \;
+	find . -type f -name '.DS_Store' -exec rm -vf {} \;
+	find . -type f -name '*.pyc' -exec rm -vf {} \;
+	find . -type f -name '*.*~' -exec rm -vf {} \;
 
 	echo "Done"
 }
