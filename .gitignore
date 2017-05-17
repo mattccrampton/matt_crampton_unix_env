@@ -10,3 +10,4 @@ mutt/.mutt-certs*
 mutt/headers*
 mutt/bodies*
 .netrwhist
+vim/swap_files/*

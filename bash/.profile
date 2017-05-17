@@ -16,7 +16,6 @@ export this_is_a_prod_machine=false
 export gnarleyHostName="AUT_DEV_VM_v2"
 
 
-
 ##### SET PATH #########################################
 export PATH=$HOME
 export PATH=$PATH:/usr/local/bin
@@ -33,6 +32,7 @@ export PATH=$PATH:/opt/local/sbin
 export PATH=$PATH:$HOME/bin
 export PATH=$PATH:$HOME/matt_crampton_unix_env/bin
 export PATH=$PATH:/Library/Frameworks/Python.framework/Versions/2.7/bin
+export PATH=$PATH:$HOME/Library/Python/2.7/bin
 export PATH=$PATH:/usr/local/go/bin
 export PATH=$PATH:$HOME/.local/bin
 
@@ -57,7 +57,7 @@ alias cls="clear"
 alias c="clear"
 alias cd..="cd .."
 alias h="gnarleyHistory"
-alias d="cd"
+alias d="dir"
 alias cp="cp -v"
 alias mv="mv -v"
 alias vi="vim -p"

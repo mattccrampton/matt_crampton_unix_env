@@ -2,6 +2,7 @@
 " https://github.com/tpope/vim-pathogen
 " execute pathogen#infect()
 filetype plugin indent on
+"filetype plugin on
 
 set backupdir=~/.vim/backup_files//
 set directory=~/.vim/swap_files//
@@ -19,37 +20,37 @@ let g:CommandTAcceptSelectionCommand='tabe'
 
 
 """ https://github.com/scrooloose/nerdtree
-let g:NERDTreeDirArrowExpandable = '>'
-let g:NERDTreeDirArrowCollapsible = 'v'
+"let g:NERDTreeDirArrowExpandable = '>'
+"let g:NERDTreeDirArrowCollapsible = 'v'
 "let NERDTreeMapOpenInTab='\r'
-let g:nerdtree_tabs_synchronize_view=1
-let NERDTreeShowHidden=1
-let g:NERDTreeWinSize=25
+"let g:nerdtree_tabs_synchronize_view=1
+"let NERDTreeShowHidden=1
+"let g:NERDTreeWinSize=25
 
 
 """ https://github.com/jistr/vim-nerdtree-tabs
-let g:nerdtree_tabs_open_on_console_startup=1
-let g:nerdtree_tabs_autofind=1
-let g:nerdtree_tabs_smart_startup_focus=2
-let g:nerdtree_tabs_focus_on_files=1
+"let g:nerdtree_tabs_open_on_console_startup=1
+"let g:nerdtree_tabs_autofind=1
+"let g:nerdtree_tabs_smart_startup_focus=2
+"let g:nerdtree_tabs_focus_on_files=1
 
 
 """ https://github.com/Xuyuanp/nerdtree-git-plugin
-let g:NERDTreeIndicatorMapCustom = {
-    \ "Modified"  : "*",
-    \ "Staged"    : "+",
-    \ "Untracked" : "@",
-    \ "Renamed"   : ">",
-    \ "Unmerged"  : "=",
-    \ "Deleted"   : "x",
-    \ "Dirty"     : "X",
-    \ "Clean"     : "C",
-    \ "Unknown"   : "?"
-    \ }
+"let g:NERDTreeIndicatorMapCustom = {
+"    \ "Modified"  : "*",
+"    \ "Staged"    : "+",
+"    \ "Untracked" : "@",
+"    \ "Renamed"   : ">",
+"    \ "Unmerged"  : "=",
+"    \ "Deleted"   : "x",
+"    \ "Dirty"     : "X",
+"    \ "Clean"     : "C",
+"    \ "Unknown"   : "?"
+"    \ }
 
 
 """ https://github.com/scrooloose/nerdcommenter
-map # \c<space><Down>
+map # \ci<Down>
 map ,# yyp#<UP><UP>
 
 """ https://github.com/airblade/vim-gitgutter
@@ -222,8 +223,8 @@ autocmd FileType css set smartindent
 " (despite the mappings later):
 "autocmd FileType make set noexpandtab shiftwidth=5
 
-"set expandtab
-"set shiftwidth=2
+set expandtab
+set shiftwidth=2
 "set softtabstop=2
 "set noexpandtab
 "set tabstop=4
@@ -293,6 +294,11 @@ noremap <Space> <PageDown>
 noremap - <PageUp>
 
 """ Move Vertically
+" 2016-2-10: I had to rename  /usr/local/Cellar/vim/7.4.891/share/vim/vim74/ftplugin.vim to ftplugin.vim.2016-2-10 to 
+" get around that plugin using the [ and ] bindings.
+" 2017-4-21 needed to nuke 4 lines from /usr/share/vim/vim74/ftplugin/python.vim to nuke the key bindings on mac
+" plus I had to turn off the mac restrictions on editing /usr files first.
+" note: use :verbose map [ to figure out what's remapping the key
 noremap [ 1<C-Y>
 noremap ] 1<C-E>
 "map j 1<C-Y>
