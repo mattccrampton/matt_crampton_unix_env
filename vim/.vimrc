@@ -122,7 +122,7 @@ set hidden
 "set listchars=tab:>.,trail:.,extends:#,nbsp:.
 "set listchars=tab:>-     " > is shown at the beginning, - throughout*/
 "set listchars=eol:$,tab:>-,trail:~ " pre-2017-2-3
-set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:<,space:.
+"set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:<,space:.
 
 set scrolloff=1
 "set scrolloff=10
