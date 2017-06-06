@@ -65,6 +65,8 @@ alias ci="vi"
 alias avn="svn"
 #alias rm="rm -v"
 alias gnarleygrep="gnarleyGrep"
+alias gnarleygrpe="gnarleyGrep"
+alias gnarleyGrpe="gnarleyGrep"
 alias killssh="sudo killall -9 ssh"
 alias killAllSSH=killssh
 alias gigwalk="cd /Volumes/GNARLEY_DB/projects/gigwalk_project/"
@@ -437,7 +439,7 @@ function gnarleyDir
 		fi
 	fi
 
-	dirCommand+=" $grepCommand "
+	dirCommand+=" $grepCommand | more "
 	eval $dirCommand
 }
 

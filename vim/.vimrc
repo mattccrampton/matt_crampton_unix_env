@@ -1,6 +1,7 @@
 " 2-16-2-10: need to figure this out: https://github.com/davidhalter/jedi-vim/blob/master/doc/jedi-vim.txt
 " https://github.com/tpope/vim-pathogen
-" execute pathogen#infect()
+execute pathogen#infect()
+execute pathogen#helptags()
 filetype plugin indent on
 "filetype plugin on
 
@@ -58,35 +59,6 @@ let g:gitgutter_map_keys = 0
 set updatetime=250
 let g:gitgutter_sign_column_always=1
 
-"https://github.com/fholgado/minibufexpl.vim/blob/master/doc/minibufexpl.txt
-"let g:miniBufExplVSplit = 35
-"let g:miniBufExplorerAutoStart = 1
-"let g:miniBufExplMaxSize = 0
-"let g:miniBufExplBRSplit = 0
-"let g:miniBufExplBuffersNeeded = 0
-"let g:miniBufExplStatusLineText = ""
-"let g:miniBufExplShowBufNumbers = 0
-"set fillchars+=vert:\ 
-"let g:did_minibufexplorer_syntax_inits = 1
-"let g:miniBufExplHideWhenDiff = 1
-""let g:miniBufExplSortBy='mru' 
-""let g:miniBufExplSortBy='name' 
-"map ,b :MBEToggle<CR>
-""https://github.com/techlivezheng/vim-plugin-minibufexpl/issues/12
-"map j :MBEbp<CR><C-W><C-W>
-"map k :MBEbn<CR><C-W><C-W>
-"map j :bp<CR>
-"map k :bn<CR>
-"map j :tabp<CR><C-W><C-W>
-"map k :tabn<CR><C-W><C-W>
-"map j :tabp<CR>
-"map k :tabn<CR>
-
-
-"map ,o kkkkkkkkkkkkkkkkkk:e .<CR>
-"map ,o :MBEOpen<CR>kkkkkkkkkk:e .<CR>
-"map ,v kkkkkkkkkkkkkkkkkk:e ~/.vimrc<CR>:so $MYVIMRC<CR>:MBEToggle<CR>:MBEToggle<CR>
-
 set backspace=2
 
 imap <D-V> ^O"+p
@@ -97,13 +69,12 @@ let g:netrw_list_hide= '.*\.pyc$'
 "nnoremap <C-T>  <C-w><C-]><C-w>T
 "nmap <C-T> :TagbarToggle<CR>
 
-
 "let g:netrw_liststyle= 3
 "let g:netrw_browse_split=3
 
 "colorscheme jelleybeans
 "colorscheme blackboard
-" colorscheme pychimp
+"colorscheme pychimp
 
 "http://www.vim.org/scripts/script.php?script_id=42
 let g:bufExplorerDefaultHelp=1
@@ -113,7 +84,6 @@ let g:bufExplorerShowRelativePath=1
 let g:bufExplorerSortBy='fullpath'
 "map ,b \be
 set hidden
-
 
 "set list
 "set tags=tags;/
@@ -224,7 +194,7 @@ autocmd FileType css set smartindent
 "autocmd FileType make set noexpandtab shiftwidth=5
 
 set expandtab
-set shiftwidth=2
+set shiftwidth=4
 "set softtabstop=2
 "set noexpandtab
 "set tabstop=4
@@ -233,7 +203,7 @@ set shiftwidth=2
 "set autoindent noexpandtab tabstop=4 shiftwidth=4
 
 " USE THIS FOR SPACES...
-set tabstop=2 shiftwidth=2 expandtab
+set tabstop=4 shiftwidth=4 expandtab
 
 "format ejs files
 au BufNewFile,BufRead *.ejs set filetype=html
@@ -378,8 +348,8 @@ vmap <space> zf
 
 set pastetoggle=<C-P> " Ctrl-P toggles paste mode
 
-"trying nerdtree 2016-3-14
-map ,o :tabe<CR>:tabm 9<CR>:Ex<CR>:tabm +1<CR>
+map ,o :tabe .<CR>
+" map ,o :tabe<CR>:tabm 9<CR>:Ex<CR>:tabm +1<CR>*/
 "map ,o :NERDTreeToggle<CR>
 "map ,o :tabe<CR>:tabm 9<CR>:NERDTreeFocusToggle<CR>
 
