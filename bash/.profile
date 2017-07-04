@@ -13,7 +13,7 @@ export EDITOR=/usr/bin/vim
 shopt -s histappend
 #export gnarleyHostName=`hostname | cut -d\.  -f1`
 export this_is_a_prod_machine=false
-export gnarleyHostName="RASPBERRY_PI"
+export gnarleyHostName="OLDAIR"
 
 
 ##### SET PATH #########################################
@@ -401,7 +401,7 @@ function gnarleyHistory
 	then
 		history
 	else
-		history | grep "$1"
+		history | grep -i "$1"
 	fi
 }
 
