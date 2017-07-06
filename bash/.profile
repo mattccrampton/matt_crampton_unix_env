@@ -13,7 +13,7 @@ export EDITOR=/usr/bin/vim
 shopt -s histappend
 #export gnarleyHostName=`hostname | cut -d\.  -f1`
 export this_is_a_prod_machine=false
-export gnarleyHostName="RASPBERRY_PI"
+export gnarleyHostName="LOCAL_VM"
 
 
 ##### SET PATH #########################################
@@ -49,7 +49,6 @@ alias unix=unixEnv
 alias bin="cd ~/matt_crampton_unix_env/bin"
 alias ll=gnarleyDir
 alias dirs="ls -alFSr"
-alias dird=gnarleyListDirs
 alias dir=gnarleyDir
 alias ir=gnarleyDir
 alias diur=gnarleyDir
@@ -251,6 +250,11 @@ function gnarleyGrepC
 	export LANG=C; find . -type f | egrep -vi "$GNARLEYGREPFILTER" | xargs grep -ci "$query" 2>&1  | egrep -v ".svn|No such file or directory|FreeBSD.6|\:0"
 }
 
+function gnarleyGrepV
+{
+    vim -p `gnarleyGrep $1 | cut -d\: -f1 | sort | uniq`
+}
+
 function gnarleyGrep
 {
 	query=`echo $1 | sed -e "s| |\ |g"`
@@ -286,67 +290,7 @@ function gnarleyGrep
 }
 
 
-function gnarleyGitPush
-{
-	echo
-	echo pushing matt_crampton_unix_env
-	cd ~/matt_crampton_unix_env
-	git push
-	cd -
-
-	if [ -f ~/matt_crampton_private_unix_env/bash/.profile.PRIVATE ]
-	then
-		gnarleyGitPrivatePush
-	fi
-}
-
-function gnarleyGitCommit
-{
-	gnarleyGitPublicStatus
-	#echo ""
-	#echo "Are you sure you want to run git commit -a for matt_crampton_unix_env?"
-	#echo "(y/N)"
-	#read YESORNO;
-
-	#if [ "$YESORNO" = "y" -o "$YESORNO" = "Y" ]
-	#then
-		cd ~/matt_crampton_unix_env
-		git commit -a
-		cd -
-	#fi
-
-	if [ -f ~/matt_crampton_private_unix_env/bash/.profile.PRIVATE ]
-	then
-		gnarleyGitPrivateCommit
-	fi
-}
-
-function gnarleyGitStatus
-{
-	gnarleyGitPublicStatus
-
-	if [ -f ~/matt_crampton_private_unix_env/bash/.profile.PRIVATE ]
-	then
-		gnarleyGitPrivateStatus
-	fi
-}
-
-function gnarleyGitPublicStatus
-{
-	echo
-	echo Checking ~/matt_crampton_unix_env
-	cd ~/matt_crampton_unix_env
-	git status
-	cd -
-}
-
 alias ge=gnarleyEdit
-function sourceAll
-{
-	clear
-	source ~/matt_crampton_unix_env/bash/.profile
-	source ~/matt_crampton_private_unix_env/bash/.profile.PRIVATE
-}
 function gnarleyEdit
 {
 	if [ -f ~/matt_crampton_private_unix_env/bash/.profile.PRIVATE ]
@@ -401,18 +345,7 @@ function gnarleyHistory
 	then
 		history
 	else
-		history | grep "$1"
-	fi
-}
-
-function gnarleyListDirs
-{
-	if [ "$OSTYPE" = "linux-gnu" ] ; then
-		ls -AlFhGd -- */
-	elif [ "$OSTYPE" = "darwin12" ] ; then
-		ls -AlFhGd -- */
-	else
-		ls -AlFhGd -- */
+		history | grep -i "$1"
 	fi
 }
 
@@ -443,37 +376,10 @@ function gnarleyDir
 	eval $dirCommand
 }
 
-function gnarleyCheckHTTPStatusHistory
-{
-	sudo tac /var/log/nginx/access.log | head -n 50000 | awk '{ print $9 }' | sort | uniq -c
-}
-
 function command_exists
 {
 	type "$1" &> /dev/null ;
 }
-
-function clean
-{
-	cd ~/gigwalk/apps/gigwalk_apps_platform
-	gnarleyDirClean
-	cd -
-}
-
-function gigwalkCD
-{
-	unameString=`uname -a`
-
-	if [[ $unameString != *Darwin* ]]
-	then
-		export PATH_TO_CODE=`readlink -f /etc/security/limits.conf`
-		export PATH_TO_TARGET=`dirname ${PATH_TO_CODE}`
-		cd ${PATH_TO_TARGET}/../../web/$1
-	else
-		cd ~/gigwalk/trunk/web
-	fi
-}
-
 
 function gnarleyDirClean
 {
