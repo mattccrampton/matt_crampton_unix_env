@@ -1,4 +1,3 @@
-" 2-16-2-10: need to figure this out: https://github.com/davidhalter/jedi-vim/blob/master/doc/jedi-vim.txt
 " https://github.com/tpope/vim-pathogen
 execute pathogen#infect()
 execute pathogen#helptags()
@@ -10,6 +9,16 @@ set directory=~/.vim/swap_files//
 set undodir=~/.vim/undo_files//
 set undodir=/tmp
 set undofile
+
+""" https://github.com/google/yapf
+" autocmd FileType python nnoremap <LocalLeader>= :0,$!yapf<CR>
+"noremap ,= :0,$!yapf<CR>
+noremap ,= :'<,'>!yapf<CR>
+
+
+""" https://github.com/davidhalter/jedi-vim/blob/master/doc/jedi-vim.txt
+let g:jedi#use_tabs_not_buffers = 1
+
 
 """ https://github.com/wincent/command-t/blob/master/doc/command-t.txt
 let g:CommandTMaxHeight=0
@@ -36,21 +45,11 @@ let g:CommandTAcceptSelectionCommand='tabe'
 "let g:nerdtree_tabs_focus_on_files=1
 
 
-""" https://github.com/Xuyuanp/nerdtree-git-plugin
-"let g:NERDTreeIndicatorMapCustom = {
-"    \ "Modified"  : "*",
-"    \ "Staged"    : "+",
-"    \ "Untracked" : "@",
-"    \ "Renamed"   : ">",
-"    \ "Unmerged"  : "=",
-"    \ "Deleted"   : "x",
-"    \ "Dirty"     : "X",
-"    \ "Clean"     : "C",
-"    \ "Unknown"   : "?"
-"    \ }
 
 
 """ https://github.com/scrooloose/nerdcommenter
+let g:NERDSpaceDelims = 1
+let g:NERDTrimTrailingWhitespace = 1
 map # \ci<Down>
 map ,# yyp#<UP><UP>
 
@@ -348,7 +347,7 @@ vmap <space> zf
 
 set pastetoggle=<C-P> " Ctrl-P toggles paste mode
 
-map ,o :tabe .<CR>
+map ,o :tabe %:h<CR>
 " map ,o :tabe<CR>:tabm 9<CR>:Ex<CR>:tabm +1<CR>*/
 "map ,o :NERDTreeToggle<CR>
 "map ,o :tabe<CR>:tabm 9<CR>:NERDTreeFocusToggle<CR>
