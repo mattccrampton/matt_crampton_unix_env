@@ -341,12 +341,23 @@ function gnarleyGitUpdate
 
 function gnarleyHistory
 {
-	if [ "$1" == "" ]
-	then
-		history
-	else
-		history | grep -i "$1"
+
+	# Usage: gnarleyHistory clone api
+	if [[ $# -gt 0 ]]; then
+		TEMP=("history | grep" "-e" "\"\$1\"" "")
+		for (( I = 2; I <= $#; ++I )); do
+			TEMP=("${TEMP[@]}" "|" "egrep" "-e" "\"\$${I}\"")
+		done
+		#echo "${TEMP[@]}"
+		eval "${TEMP[@]}"
 	fi
+
+	# if [ "$1" == "" ]
+	# then
+	# 	history
+	# else
+	# 	history | grep -i "$1"
+	# fi
 }
 
 function gnarleyDir
