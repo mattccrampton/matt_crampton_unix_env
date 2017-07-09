@@ -13,8 +13,10 @@ export EDITOR=/usr/bin/vim
 shopt -s histappend
 #export gnarleyHostName=`hostname | cut -d\.  -f1`
 export this_is_a_prod_machine=false
-export gnarleyHostName="LOCAL_VM"
+export gnarleyHostName="VIRTUALBOX"
 
+bind '"\e[A":history-search-backward'
+bind '"\e[A":history-search-backward'
 
 ##### SET PATH #########################################
 export PATH=$HOME
@@ -118,6 +120,17 @@ function vimrc
 	cd ~/.vim
 	vi ~/.vimrc
 	cd -
+}
+
+function cdf
+{
+    FOUND_FILE=`find . | grep -i "$1" | grep -v venv | head -n 1`
+    echo "Found: $FOUND_FILE"
+    if [ ! -d "$FOUND_FILE" ]; then
+        FOUND_FILE=$(dirname "${FOUND_FILE}")
+    fi
+    echo "CDing to $FOUND_FILE"
+    cd $FOUND_FILE
 }
 
 function gnarleyFind
@@ -339,6 +352,7 @@ function gnarleyGitUpdate
 
 }
 
+
 function gnarleyHistory
 {
 
@@ -350,6 +364,8 @@ function gnarleyHistory
 		done
 		#echo "${TEMP[@]}"
 		eval "${TEMP[@]}"
+    else
+	 	history
 	fi
 
 	# if [ "$1" == "" ]
