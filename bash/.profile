@@ -15,8 +15,8 @@ shopt -s histappend
 export this_is_a_prod_machine=false
 export gnarleyHostName="VIRTUALBOX"
 
-bind '"\e[A":history-search-backward'
-bind '"\e[A":history-search-backward'
+# bind '"\e[A":history-search-backward'
+# bind '"\e[A":history-search-backward'
 
 ##### SET PATH #########################################
 export PATH=$HOME
@@ -61,7 +61,9 @@ alias h="gnarleyHistory"
 alias d="dir"
 alias cp="cp -v"
 alias mv="mv -v"
-alias vi="vim -p"
+# alias vi="vim -p"
+alias vim="gnarleyVim"
+alias vi="gnarleyVim"
 alias ci="vi"
 alias avn="svn"
 #alias rm="rm -v"
@@ -358,9 +360,9 @@ function gnarleyHistory
 
 	# Usage: gnarleyHistory clone api
 	if [[ $# -gt 0 ]]; then
-		TEMP=("history | grep" "-e" "\"\$1\"" "")
+		TEMP=("history | grep" "-ie" "\"\$1\"" "")
 		for (( I = 2; I <= $#; ++I )); do
-			TEMP=("${TEMP[@]}" "|" "egrep" "-e" "\"\$${I}\"")
+			TEMP=("${TEMP[@]}" "|" "egrep" "-ie" "\"\$${I}\"")
 		done
 		#echo "${TEMP[@]}"
 		eval "${TEMP[@]}"
@@ -552,6 +554,22 @@ function setPS1_PRETTY
 	fi
 }
 
+function gnarleyVim
+{
+    # if [ -n "$TMUX" ]; then
+        # if [ `tmux list-sessions 2>&1 | grep -v "error" |  grep -v "no server running" | wc -l` -gt 0 ]; then
+            # DISPLAY_PATH=`realpath $1 | sed -e "s|\/home\/revicon\/||g"`
+            # tmux rename-window "vim $DISPLAY_PATH"
+        # fi
+    # fi
+    /usr/bin/vim -p $*
+    # if [ -n "$TMUX" ]; then
+        # if [ `tmux list-sessions 2>&1 | grep -v "error" |  grep -v "no server running" | wc -l` -gt 0 ]; then
+            # tmux rename-window "              "
+        # fi
+    # fi
+}
+
 setPromptCommand
 #setPS1
 
@@ -569,6 +587,8 @@ if command_exists tmux ; then
 			echo "----------"
 			echo ""
 		fi
+    # else
+        # tmux rename-window "              "
 	fi
 fi
 
