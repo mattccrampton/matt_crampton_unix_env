@@ -11,9 +11,9 @@ export EDITOR=/usr/bin/vim
 #export EDITOR=/usr/local/bin/vim
 
 shopt -s histappend
-#export gnarleyHostName=`hostname | cut -d\.  -f1`
+export gnarleyHostName=`hostname | cut -d\.  -f1`
 export this_is_a_prod_machine=false
-export gnarleyHostName="LOCAL_VM"
+#export gnarleyHostName="MACBOOKPRO"
 
 
 ##### SET PATH #########################################
@@ -558,7 +558,7 @@ fi
 
 
 #Echos status to screen
-echo -n -e "\033]0;$gnarleyHostName\007"
+#echo -n -e "\033]0;$gnarleyHostName\007"
 
 #INTTEST=0
 #if [[ -t "$INTTEST" || -p /dev/stdin ]]
