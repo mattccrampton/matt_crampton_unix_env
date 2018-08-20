@@ -12,7 +12,6 @@ export EDITOR=/usr/bin/vim
 
 shopt -s histappend
 export gnarleyHostName=`hostname | cut -d\.  -f1`
-export this_is_a_prod_machine=false
 #export gnarleyHostName="MACBOOKPRO"
 #export gnarleyHostName="VIRTUALBOX"
 
@@ -52,6 +51,7 @@ alias unix=unixEnv
 alias bin="cd ~/matt_crampton_unix_env/bin"
 alias ll=gnarleyDir
 alias dirs="ls -alFSr"
+alias ddir="ls -alF | grep drw"
 alias dir=gnarleyDir
 alias ir=gnarleyDir
 alias diur=gnarleyDir
@@ -73,16 +73,15 @@ alias gnarleygrpe="gnarleyGrep"
 alias gnarleyGrpe="gnarleyGrep"
 alias killssh="sudo killall -9 ssh"
 alias killAllSSH=killssh
-alias gigwalk="cd /Volumes/GNARLEY_DB/projects/gigwalk_project/"
 alias desktop="cd ~/Desktop/"
-#alias gigwalk=gigwalkCD
 
 alias .='pwd'
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
-
-
+alias .....='cd ../../../..'
+alias ......='cd ../../../../..'
+alias .......='cd ../../../../../..'
 
 if [ -x /usr/bin/dircolors ]; then
 	test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
@@ -118,6 +117,11 @@ function pcopy
 	pwd | pbcopy
 }
 
+function tmuxrc
+{
+	vi ~/.tmux.conf
+}
+
 function vimrc
 {
 	cd ~/.vim
@@ -127,7 +131,7 @@ function vimrc
 
 function cdf
 {
-    FOUND_FILE=`find . | grep -i "$1" | grep -v venv | head -n 1`
+    FOUND_FILE=`find . | grep -i "$1" | egrep -v "venv|node_modules" | head -n 1`
     echo "Found: $FOUND_FILE"
     if [ ! -d "$FOUND_FILE" ]; then
         FOUND_FILE=$(dirname "${FOUND_FILE}")
@@ -262,8 +266,9 @@ export GNARLEYGREPFILTER="node_modules|PHPPowerPoint|PHPExcel|aws-sdk|js-concat|
 
 function gnarleyGrepC
 {
-	query=`echo $1 | sed -e "s| |\ |g"`
-	export LANG=C; find . -type f | egrep -vi "$GNARLEYGREPFILTER" | xargs grep -ci "$query" 2>&1  | egrep -v ".svn|No such file or directory|FreeBSD.6|\:0"
+	# query=`echo $1 | sed -e "s| |\ |g"`
+	# export LANG=C; find . -type f | egrep -vi "$GNARLEYGREPFILTER" | xargs grep -ci "$query" 2>&1  | egrep -v ".svn|No such file or directory|FreeBSD.6|\:0"
+    grep -rInHc "$@" . | grep -v ":0"
 }
 
 function gnarleyGrepV
@@ -272,6 +277,16 @@ function gnarleyGrepV
 }
 
 function gnarleyGrep
+{
+	# query=`echo $1 | sed -e "s| |\ |g"`
+	# export LANG=C;
+	# TCOLS=`tput cols`
+    # grep -r "$query" * | cut -c -$TCOLS
+    grep -rInHi --exclude-dir={_site,.mypy_cache,venv,node_modules,.git,build} "$@" .
+    # echo "works"
+}
+
+function gnarleyGrepOLD
 {
 	query=`echo $1 | sed -e "s| |\ |g"`
 	export LANG=C;
@@ -393,16 +408,17 @@ function gnarleyDir
 	grepCommand=""
 	if [ "$1" != "" ]
 	then
-		if [ "$OSTYPE" = "linux-gnu" ] ; then
-			grepCommand="| grep -i $1"
-		elif [ "$OSTYPE" = "darwin12" ] ; then
-			grepCommand="| grep -i --colour=always $1"
-		else
-			grepCommand="| grep -i $1"
-		fi
+        grepCommand="| grep -i $1"
+		# if [ "$OSTYPE" = "linux-gnu" ] ; then
+			# grepCommand="| grep -i $1"
+        # elif [[ "$OSTYPE" == *"darwin"* ]] ; then
+			# grepCommand="| grep -i --colour=always $1"
+		# else
+			# grepCommand="| grep -i $1"
+		# fi
+        dirCommand+=" $grepCommand | more "
 	fi
 
-	dirCommand+=" $grepCommand | more "
 	eval $dirCommand
 }
 
@@ -423,6 +439,7 @@ function gnarleyDirClean
 	find . -type f -name 'svn*.tmp' -exec rm -vf {} \;
 	find . -type f -name '._*' -exec rm -vf {} \;
 	find . -type f -name '.DS_Store' -exec rm -vf {} \;
+	find . -type f -name '*.plist' -exec rm -vf {} \;
 	find . -type f -name '*.pyc' -exec rm -vf {} \;
 	find . -type f -name '*.*~' -exec rm -vf {} \;
 
@@ -495,6 +512,9 @@ function generatePrettyPath
 
 function generateGitBashData
 {
+    #git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/|\1/' | awk -v len=30 '{ if (length($0) > len) print substr($0, 1, len-3) "..."; else print; }'
+    # git name-rev --name-only HEAD | tail -c 20 | sed -e '/^[^*]/d' -e 's/* \(.*\)/|\1/'
+    # return
 	# * unstaged
 	# + staged
 	# $ stashed
@@ -503,41 +523,37 @@ function generateGitBashData
 	# > indicates you are ahead
 	# <> deverged
 
-	declare -f -F __git_ps1 > /dev/null
-	if [ $? -eq 0 ]
+	# declare -f -F __git_ps1 > /dev/null
+    # GIT_BRANCH=$(git name-rev --name-only HEAD 2> /dev/null)
+    GIT_BRANCH=$(git branch 2> /dev/null | grep \* | cut -d ' ' -f2)
+    if [ -z "$GIT_BRANCH" ]
 	then
-		GITPS1="$(__git_ps1 "%s")"
-		if [[ -z "$GITPS1" ]]
-		then
-			echo ""
-		else
-			GITPS1="${GITPS1//master/M}"
-			GITPS1="${GITPS1//=/}"
-			GITPS1="${GITPS1// /}"
-			echo "|git:$GITPS1"
-		fi
-	else 
+        # GITPS1="${GITPS1//master/M}"
+        # GITPS1="${GITPS1//=/}"
+        # GITPS1="${GITPS1// /}"
+        # echo "|git:$GITPS1"
 		echo ""
+	else 
+        # echo $GIT_BRANCH
+        # echo ${#GIT_BRANCH}
+        if [ ${#GIT_BRANCH} -ge 45 ]
+        then
+            GIT_BRANCH=$(echo $GIT_BRANCH | tail -c 44)
+            echo "|<$GIT_BRANCH"
+        else
+            echo "|$GIT_BRANCH"
+        fi
 	fi
 }
 
 function setPromptCommand
 {
-	if [ "$this_is_a_prod_machine" = true ] ; then
-		export PROMPT_COMMAND="setPS1_PROD; history -a"
-		#PROMPT_COMMAND="$PROMPT_COMMAND;history -a"
-	else
-		export PROMPT_COMMAND="setPS1; history -a"
-	fi
+    export PROMPT_COMMAND="setPS1; history -a"
 }
 
-function setPS1_PROD
+function setTmuxTitle
 {
-	# \e[7m does an invert color
-	export PS1="[\e[7m\[\e[37;1m\]\u\[\e[31;1m\]@\[\e[37;1m\]$gnarleyHostName\[\e[0m\]`generateGitBashData`]\[\e[32m\] \w/\[\e[0m\]"
-	if [ -n "$VIRTUAL_ENV" ]; then
-		export PS1="[\e[7m\[\e[37;1m\]\u\[\e[31;1m\]@\[\e[37;1m\]$gnarleyHostName\[\e[0m\]`generateGitBashData`|\[\e[31;1m\]VENV\[\e[37;1m\]]\[\e[32m\] \w/\[\e[0m\]"
-	fi
+    export TMUX_WINDOW_TITLE=$1
 }
 
 function setPS1
@@ -546,28 +562,33 @@ function setPS1
 	if [ -n "$VIRTUAL_ENV" ]; then
 		export PS1="[\[\e[37;1m\]\u\[\e[31;1m\]@\[\e[37;1m\]$gnarleyHostName\[\e[0m\]`generateGitBashData`|\[\e[31;1m\]VENV\[\e[37;1m\]]\[\e[32m\] \w/\[\e[0m\]"
 	fi
-}
-function setPS1_PRETTY
-{
-	export PS1="[\[\e[37;1m\]\u\[\e[31;1m\]@\[\e[37;1m\]$gnarleyHostName\[\e[0m\]`generateGitBashData`]\[\e[32m\] `generatePrettyPath`/\[\e[0m\]"
-	if [ -n "$VIRTUAL_ENV" ]; then
-		export PS1="[\[\e[37;1m\]\u\[\e[31;1m\]@\[\e[37;1m\]$gnarleyHostName\[\e[0m\]`generateGitBashData`|\[\e[31;1m\]VENV\[\e[37;1m\]]\[\e[32m\] `generatePrettyPath`/\[\e[0m\]"
-	fi
+
+    # Set TMUX window title
+    # if [ -n "$TMUX" ]
+    # then
+        # echo "yes $TMUX_WINDOW_TITLE"
+        # if [ -n "$TMUX_WINDOW_TITLE" ]; then
+            # tmux rename-window $TMUX_WINDOW_TITLE
+        # fi
+    # else
+        # echo "no"
+    # fi
 }
 
 function gnarleyVim
 {
-    # if [ -n "$TMUX" ]; then
-        # if [ `tmux list-sessions 2>&1 | grep -v "error" |  grep -v "no server running" | wc -l` -gt 0 ]; then
-            # DISPLAY_PATH=`realpath $1 | sed -e "s|\/home\/revicon\/||g"`
-            # tmux rename-window "vim $DISPLAY_PATH"
-        # fi
-    # fi
+    #if [ -n "$TMUX" ]; then
+    #    if [ `tmux list-sessions 2>&1 | grep -v "error" |  grep -v "no server running" | wc -l` -gt 0 ]; then
+    #        # DISPLAY_PATH=`realpath $1 | sed -e "s|\/home\/revicon\/||g"`
+    #        # tmux rename-window "vim $DISPLAY_PATH"
+    #        tmux rename-window "vim"
+    #    fi
+    #fi
     /usr/bin/vim -p $*
     # if [ -n "$TMUX" ]; then
-        # if [ `tmux list-sessions 2>&1 | grep -v "error" |  grep -v "no server running" | wc -l` -gt 0 ]; then
-            # tmux rename-window "              "
-        # fi
+    #     if [ `tmux list-sessions 2>&1 | grep -v "error" |  grep -v "no server running" | wc -l` -gt 0 ]; then
+    #         tmux rename-window "bash"
+    #     fi
     # fi
 }
 

@@ -10,6 +10,29 @@ set undodir=~/.vim/undo_files//
 set undodir=/tmp
 set undofile
 
+
+
+""" https://github.com/w0rp/ale
+let g:ale_sign_column_always = 1
+let g:ale_sign_error = '>>'
+let g:ale_sign_warning = '--'
+" highlight clear ALEErrorSign
+" highlight clear ALEWarningSign
+" let g:ale_set_highlights = 0
+" let g:ale_lint_on_text_changed = 'never'
+" let g:ale_lint_on_enter = 0
+let g:ale_lint_delay = 500
+" highlight ALEWarning ctermbg=DarkMagenta
+highlight SignColumn ctermbg=Black
+
+""" https://github.com/pangloss/vim-javascript
+let g:javascript_plugin_flow = 1
+
+
+""" https://github.com/mxw/vim-jsx.git
+let g:jsx_ext_required = 0
+
+
 """ https://github.com/google/yapf
 " autocmd FileType python nnoremap <LocalLeader>= :0,$!yapf<CR>
 "noremap ,= :0,$!yapf<CR>
@@ -44,9 +67,6 @@ let g:CommandTAcceptSelectionCommand='tabe'
 "let g:nerdtree_tabs_smart_startup_focus=2
 "let g:nerdtree_tabs_focus_on_files=1
 
-
-
-
 """ https://github.com/scrooloose/nerdcommenter
 let g:NERDSpaceDelims = 1
 let g:NERDTrimTrailingWhitespace = 1
@@ -56,7 +76,8 @@ map ,# yyp#<UP><UP>
 """ https://github.com/airblade/vim-gitgutter
 let g:gitgutter_map_keys = 0
 set updatetime=250
-let g:gitgutter_sign_column_always=1
+" let g:gitgutter_sign_column_always=1
+set signcolumn=yes
 
 set backspace=2
 
@@ -348,6 +369,7 @@ vmap <space> zf
 set pastetoggle=<C-P> " Ctrl-P toggles paste mode
 
 map ,o :tabe %:h<CR>
+map ,v :vsp %:h<CR><C-w>L
 " map ,o :tabe<CR>:tabm 9<CR>:Ex<CR>:tabm +1<CR>*/
 "map ,o :NERDTreeToggle<CR>
 "map ,o :tabe<CR>:tabm 9<CR>:NERDTreeFocusToggle<CR>
