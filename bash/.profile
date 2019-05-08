@@ -7,7 +7,8 @@ umask 022
 export HISTFILE=~/.bash_history
 export HISTSIZE=200000;
 export HISTCONTROL=ignoreboth:erasedups
-export EDITOR=/usr/bin/vim
+export EDITOR=/usr/local/bin/nvim
+#export EDITOR=/usr/bin/vim
 #export EDITOR=/usr/local/bin/vim
 
 shopt -s histappend
@@ -28,7 +29,7 @@ export PATH=$PATH:/sbin
 export PATH=$PATH:/usr/bin
 export PATH=$PATH:/usr/sbin
 export PATH=$PATH:/usr/X11R6/bin
-export PATH=$PATH:/opt/vim/bin
+# export PATH=$PATH:/opt/vim/bin
 export PATH=$PATH:/opt/local/bin
 export PATH=$PATH:/opt/local/sbin
 export PATH=$PATH:$HOME/bin
@@ -42,7 +43,7 @@ export PATH=$PATH:$HOME/.local/bin
 export MANPATH=$MANPATH:/usr/share/man
 export MANPATH=$MANPATH:/usr/local/share/man
 export JAVA_HOME=/usr/local/bin/java
-export SVN_EDITOR="/usr/bin/vim"
+# export SVN_EDITOR="/usr/bin/vim"
 
 
 #### ALIASES ###########################################
@@ -51,6 +52,7 @@ alias unix=unixEnv
 alias bin="cd ~/matt_crampton_unix_env/bin"
 alias ll=gnarleyDir
 alias dirs="ls -alFSr"
+alias dird="ls -AlFhGtr"
 alias ddir="ls -alF | grep drw"
 alias dir=gnarleyDir
 alias ir=gnarleyDir
@@ -63,9 +65,10 @@ alias d="dir"
 alias cp="cp -v"
 alias mv="mv -v"
 # alias vi="vim -p"
+alias nvim="gnarleyVim"
 alias vim="gnarleyVim"
 alias vi="gnarleyVim"
-alias ci="vi"
+alias ci="gnarleyVim"
 alias avn="svn"
 #alias rm="rm -v"
 alias gnarleygrep="gnarleyGrep"
@@ -122,22 +125,31 @@ function tmuxrc
 	vi ~/.tmux.conf
 }
 
-function vimrc
+function nvimrc
 {
-	cd ~/.vim
-	vi ~/.vimrc
+	cd ~/.config/nvim
+	vi init.vim
 	cd -
 }
 
+# function vimrc
+# {
+	# cd ~/.vim
+	# vi ~/.vimrc
+	# cd -
+# }
+
 function cdf
 {
-    FOUND_FILE=`find . | grep -i "$1" | egrep -v "venv|node_modules" | head -n 1`
+    FOUND_FILE=`find . | grep -i "$1" | egrep -v "Archived Notes|venv|node_modules|pycache|DashboardNavbar" | fzf`
+    #FOUND_FILE=`find . | grep -i "$1" | egrep -v "Archived Notes|venv|node_modules|pycache|DashboardNavbar" | head -n 1`
     echo "Found: $FOUND_FILE"
     if [ ! -d "$FOUND_FILE" ]; then
         FOUND_FILE=$(dirname "${FOUND_FILE}")
     fi
     echo "CDing to $FOUND_FILE"
-    cd $FOUND_FILE
+    cd "$FOUND_FILE"
+    gnarleyDir
 }
 
 function gnarleyFind
@@ -162,7 +174,6 @@ function gitClean
 	fi
 }
 
-
 function gnarleyValidateJSON
 {
 	if [ -f $1 ]
@@ -179,89 +190,6 @@ function gnarleyDiffMerge
 	~/matt_crampton_unix_env/python/gnarleyDiffMerge.py $1 $2
 }
 
-function svnupdryrun
-{
-	svn merge --dry-run -r BASE:HEAD .
-}
-
-function svns
-{
-	svn stat
-}
-
-function svnDiff
-{
-	select FILENAME in $(svn stat | grep -v '?' | cut -c 3-);
-	do
-	     #echo "You picked $FILENAME ($REPLY)"
-	     svn diff $FILENAME
-	     break
-	done
-}
-
-function checkHTTPStatusForURL
-{
-	curl --write-out %{http_code} --silent --output /dev/null $1
-	echo ""
-}
-
-function watchAccess
-{
-	TCOLS=`tput cols`
-	LASTW=`echo "$TCOLS - 40" | bc`
-
-	if which unbuffer
-	then
-		sudo tailf /var/log/nginx/access.log | unbuffer -p awk -v lastw=$LASTW -f ~/matt_crampton_unix_env/awk/loadBalancerAccessLogTail.awk
-	else
-		sudo tailf /var/log/nginx/access.log | cut -c -$TCOLS
-	fi
-}
-
-function watchAccessFE
-{
-	TCOLS=`tput cols`
-	LASTW=20
-
-	if which unbuffer
-	then
-		sudo tailf /var/log/nginx/access.log | unbuffer -p awk -v lastw=$LASTW -f ~/matt_crampton_unix_env/awk/accessLogTail.awk
-	else
-		sudo tailf /var/log/nginx/access.log | cut -c -$TCOLS
-	fi
-}
-
-function watchPHPErrorsW
-{
-	if which unbuffer
-		then sudo tail -f /var/log/nginx/error.log | unbuffer -p awk -v term_cols="10000" -f ~/matt_crampton_unix_env/awk/logTail.awk
-	else
-		sudo tail -f /var/log/nginx/error.log
-	fi
-}
-
-function watchPHPErrors
-{
-	TERM_COLS=`tput cols`
-	if which unbuffer
-		then sudo tail -f /var/log/nginx/error.log | unbuffer -p awk -v term_cols="$TERM_COLS" -f ~/matt_crampton_unix_env/awk/logTail.awk
-	else
-		sudo tail -f /var/log/nginx/error.log
-	fi
-}
-		
-
-function watchLogs
-{
-	sudo multitail  \
-	-I /var/log/auth.log  \
-	-I /var/log/daemon.log  \
-	-I /var/log/php5-fpm.log  \
-	-I /var/log/nginx/error.log  \
-	-I /var/log/syslog
-}
-
-
 export GNARLEYGREPFILTER="node_modules|PHPPowerPoint|PHPExcel|aws-sdk|js-concat|css-min|js-min|.git|.svn|.jpg|.gif|.png|.swf|tags\'"
 
 function gnarleyGrepC
@@ -273,7 +201,8 @@ function gnarleyGrepC
 
 function gnarleyGrepV
 {
-    vim -p `gnarleyGrep $1 | cut -d\: -f1 | sort | uniq`
+    # Fixed spaces in filenames
+    nvim -p "`gnarleyGrep "$@" | cut -d\: -f1 | sort | uniq`"
 }
 
 function gnarleyGrep
@@ -286,42 +215,6 @@ function gnarleyGrep
     # echo "works"
 }
 
-function gnarleyGrepOLD
-{
-	query=`echo $1 | sed -e "s| |\ |g"`
-	export LANG=C;
-	TCOLS=`tput cols`
-	#find . -type f | egrep -vi "$GNARLEYGREPFILTER" | xargs grep -i "$query" 2>&1 | sed -e "s|\t||g" | egrep -v ".svn|No such file or directory|FreeBSD.6|Binary file"
-
-	find . -type f \
-	-name "*" \
-	! -name "*.pyc" \
-	-not -path "*site-packages*" \
-	-not -path "*node_modules*" \
-	-not -path "*venv*" \
-	-not -path "*DataTables-1.9.4*" \
-	-not -path "*PHPPowerPoint*" \
-	-not -path "*PHPExcel*" \
-	-not -path "*aws-sdk*" \
-	-not -path "*js-concat*" \
-	-not -path "*css-min*" \
-	-not -path "*js-min*" \
-	-not -path "*.git*" \
-	-not -path "*.png*" \
-	-not -path "*.gif*" \
-	-not -path "*.jpg*" \
-	-not -path "*.avi*" \
-	-not -path "*.mp3*" \
-	-not -path "*.mov*" \
-	-not -path "*.pyc*" \
-	-not -path "*.zip*" \
-	-not -path "*core_dump*" \
-	-not -path "*.svn*" \
-	-exec grep -iH "$query" {} \; | sed -e "s|	||g" | sed -e "s|  ||g" | cut -c -$TCOLS
-}
-
-
-alias ge=gnarleyEdit
 function gnarleyEdit
 {
 	if [ -f ~/matt_crampton_private_unix_env/bash/.profile.PRIVATE ]
@@ -369,7 +262,6 @@ function gnarleyGitUpdate
 	fi
 
 }
-
 
 function gnarleyHistory
 {
@@ -446,23 +338,6 @@ function gnarleyDirClean
 	echo "Done"
 }
 
-function gnarleyCtags
-{
-	if command_exists ctags ; then
-
-		#Checks if there is a newer version of ctags
-		#installed via brew on osx, otherwise uses standard one
-		BREWCTAGS="`brew --prefix`/bin/ctags"
-		if [ -f $BREWCTAGS ]
-		then
-			$BREWCTAGS $*
-		else
-			ctags $*
-		fi
-
-	fi
-}
-
 function gitPS1Help
 {
 	echo "--- Files ---"
@@ -536,9 +411,9 @@ function generateGitBashData
 	else 
         # echo $GIT_BRANCH
         # echo ${#GIT_BRANCH}
-        if [ ${#GIT_BRANCH} -ge 45 ]
+        if [ ${#GIT_BRANCH} -ge 25 ]
         then
-            GIT_BRANCH=$(echo $GIT_BRANCH | tail -c 44)
+            GIT_BRANCH=$(echo $GIT_BRANCH | tail -c 24)
             echo "|<$GIT_BRANCH"
         else
             echo "|$GIT_BRANCH"
@@ -584,7 +459,11 @@ function gnarleyVim
     #        tmux rename-window "vim"
     #    fi
     #fi
-    /usr/bin/vim -p $*
+    
+    # Fixed spaces in filenames
+    #/usr/bin/vim -p "$@"
+    /usr/local/bin/nvim -p "$@"
+
     # if [ -n "$TMUX" ]; then
     #     if [ `tmux list-sessions 2>&1 | grep -v "error" |  grep -v "no server running" | wc -l` -gt 0 ]; then
     #         tmux rename-window "bash"

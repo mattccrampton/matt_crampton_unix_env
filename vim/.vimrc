@@ -12,6 +12,11 @@ set undofile
 
 
 
+""" https://github.com/junegunn/fzf#as-vim-plugin
+set rtp+=/usr/local/opt/fzf
+map ,f :tabnew<CR>:FZF .<CR>
+
+
 """ https://github.com/w0rp/ale
 let g:ale_sign_column_always = 1
 let g:ale_sign_error = '>>'
@@ -70,6 +75,7 @@ let g:CommandTAcceptSelectionCommand='tabe'
 """ https://github.com/scrooloose/nerdcommenter
 let g:NERDSpaceDelims = 1
 let g:NERDTrimTrailingWhitespace = 1
+let g:NERDCommentEmptyLines = 0
 map # \ci<Down>
 map ,# yyp#<UP><UP>
 
@@ -124,6 +130,13 @@ set wildignore+=*.o,*.pyc,*venv/*,*vendor_BACKUP/*,*vendor_custom/*,*vendor/*,*n
 set virtualedit=all
 set tabpagemax=50
 
+" auto change dir to whatever file is currently views (so we can :w newfile.js
+" and it will be in the same dir of the file I'm editing.
+" set autochdir
+
+" Code Folding
+set foldmethod=indent
+set foldlevelstart=20
 
 " don't have files trying to override this .vimrc:
 set nomodeline
@@ -281,7 +294,8 @@ noremap \\ :%s:::c<Left><Left><Left>
 fixdel
 
 noremap <Space> <PageDown>
-noremap - <PageUp>
+"noremap - <PageUp>
+nmap - <Plug>NetrwBrowseUpDir
 
 """ Move Vertically
 " 2016-2-10: I had to rename  /usr/local/Cellar/vim/7.4.891/share/vim/vim74/ftplugin.vim to ftplugin.vim.2016-2-10 to 
@@ -420,4 +434,3 @@ function GnarleyGetUnnamedRegister()
 	endif
 	return strpart(l, 0, 39) . ">"
 endfunction
-
