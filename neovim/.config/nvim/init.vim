@@ -29,6 +29,17 @@ set formatoptions-=t
 set matchpairs+=<:>
 set ruler
 
+" https://til.hashrocket.com/posts/t8osyzywau-treat-words-with-dash-as-a-word-in-vim
+set iskeyword+=-
+
+" https://superuser.com/questions/271023/can-i-disable-continuation-of-comments-to-the-next-line-in-vim
+set formatoptions-=cro
+
+" Disable matching bracket highlighting
+" https://medium.com/usevim/vim-101-working-with-brackets-a0b4cc628e4f
+" Or.. :NoMatchParen
+let loaded_matchparen = 1
+
 
 """ GLOBAL KEY BINDINGS """"""""""""""""""""""""""""""""""""""""""""""
 
@@ -77,11 +88,16 @@ noremap Y y$
 
 map <Enter> O<ESC><ESC><Down>
 "map <Enter> I<CR><ESC>
-noremap \\ "zyiw:%s:<C-R>z::c<Left><Left>
+noremap \\ "zyiw:%s:<C-R>z::cg<Left><Left><Left>
 
 set pastetoggle=<C-P> " Ctrl-P toggles paste mode
 
 map l :set invlist<CR>
+
+""" Paging
+noremap <Space> <PageDown>
+noremap - <PageUp>
+" nmap - <Plug>NetrwBrowseUpDir
 
 
 """ PLUGINS """"""""""""""""""""""""""""""""""""""""""""""""""
