@@ -25,6 +25,9 @@ set history=50
 set showmode
 set showcmd
 
+" disable mouse
+set mouse=
+
 set formatoptions-=t
 set matchpairs+=<:>
 set ruler
@@ -88,7 +91,7 @@ noremap Y y$
 
 map <Enter> O<ESC><ESC><Down>
 "map <Enter> I<CR><ESC>
-noremap \\ "zyiw:%s:<C-R>z::cg<Left><Left><Left>
+noremap \\ :%s:::cg<Left><Left><Left><Left>
 
 set pastetoggle=<C-P> " Ctrl-P toggles paste mode
 
@@ -98,6 +101,10 @@ map l :set invlist<CR>
 noremap <Space> <PageDown>
 noremap - <PageUp>
 " nmap - <Plug>NetrwBrowseUpDir
+
+
+""" FILETYPES """"""""""""""""""""""""""""""""""""""""""""""""""
+autocmd FileType yaml,yml setlocal ts=2 sts=2 sw=2 expandtab
 
 
 """ PLUGINS """"""""""""""""""""""""""""""""""""""""""""""""""
@@ -125,8 +132,10 @@ let g:javascript_plugin_flow = 1
 Plug 'pangloss/vim-javascript'
 let g:jsx_ext_required = 0
 
-""" https://github.com/w0rp/ale
-Plug 'w0rp/ale'
+""" OLD: https://github.com/w0rp/ale
+""" https://github.com/dense-analysis/ale
+" OLD: Plug 'w0rp/ale'
+Plug 'dense-analysis/ale'
 let g:ale_sign_column_always = 1
 let g:ale_sign_error = '>>'
 let g:ale_sign_warning = '--'
@@ -138,6 +147,16 @@ let g:ale_sign_warning = '--'
 let g:ale_lint_delay = 500
 " highlight ALEWarning ctermbg=DarkMagenta
 highlight SignColumn ctermbg=Black
+let g:ale_linters = {
+    \ 'javascript': ['eslint']
+    \ }
+let g:ale_fixers = {
+    \ 'javascript': ['prettier'],
+    \ 'css': ['prettier'],
+    \ }
+let g:ale_javascript_eslint_executable='npx eslint'
+let g:ale_linters_explicit = 1
+noremap F :ALEFix<CR>:%s:{' '}::g<CR>:ALEFix<CR>
 
 """ https://github.com/davidhalter/jedi-vim
 Plug 'davidhalter/jedi-vim'
@@ -162,16 +181,16 @@ set signcolumn=yes
 " call denite#custom#source('grep', 'converters', ['converter/abbr_word'])
 
 """ https://github.com/junegunn/fzf.vim
-Plug '/usr/local/opt/fzf'
-Plug 'junegunn/fzf.vim'
-let g:fzf_action = { 'enter': 'tabedit' }
-let g:fzf_layout = { 'window': '-tabnew' }
-" vnoremap ,g "zy:Rg <C-R>z<CR>
-vnoremap ,f "zy:Locate <C-R>z<CR>
-noremap ,g "zyiw:Rg <C-R>z<CR>
-noremap ,f :Files<CR>
-" noremap ,f "zyiw:FZF -q <C-R>z<CR>
-noremap gf "zyiw:FZF -q <C-R>z<CR>
+" Plug '/usr/local/opt/fzf'
+" Plug 'junegunn/fzf.vim'
+" let g:fzf_action = { 'enter': 'tabedit' }
+" let g:fzf_layout = { 'window': '-tabnew' }
+" " vnoremap ,g "zy:Rg <C-R>z<CR>
+" vnoremap ,f "zy:Locate <C-R>z<CR>
+" noremap ,g "zyiw:Rg <C-R>z<CR>
+" noremap ,f :Files<CR>
+" " noremap ,f "zyiw:FZF -q <C-R>z<CR>
+" noremap gf "zyiw:FZF -q <C-R>z<CR>
 
 call plug#end()
 " run when updating...

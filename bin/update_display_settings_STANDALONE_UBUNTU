@@ -1,0 +1,9 @@
+#!/bin/bash
+# zenity --info --text="STARTING CHANGE\n$(xrandr --listmonitors)"
+
+xrandr > /dev/null
+
+xrandr \
+    --output eDP-1  --mode 1440x810  --rate 119.99 --primary
+
+# zenity --info --text="FINISHED CHANGE\n$(xrandr --listmonitors)"

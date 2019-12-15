@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# zenity --info --text="STARTING CHANGE\n$(xrandr --listmonitors)"
+
+xrandr > /dev/null
+
+# HDMI plug
+# xrandr \
+    # --output eDP-1  --mode 1440x810  --rate 119.99 --primary \
+    # --output HDMI-2 --mode 1920x1080               --above eDP-1
+# Thunderdock
+xrandr \
+    --output eDP-1  --mode 1440x810  --rate 119.99 --primary \
+    --output DP-2-3 --mode 1920x1080               --above eDP-1
+
+# zenity --info --text="FINISHED CHANGE\n$(xrandr --listmonitors)"
+
+# xrandr \
+    # --output eDP-1  --mode 1440x810  --rate 119.99 \
+    # --output HDMI-2 --mode 1920x1200               --primary --above eDP-1
+
+# xrandr \
+    # --output eDP-1  --mode 1440x810  --rate 119.99 --primary \
+    # --output HDMI-2 --mode 1680x1050               --above eDP-1

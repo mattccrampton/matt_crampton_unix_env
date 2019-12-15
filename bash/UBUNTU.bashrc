@@ -3,7 +3,7 @@
 export HISTFILE=~/.bash_history
 export HISTSIZE=200000;
 export HISTCONTROL=ignoreboth:erasedups
-export EDITOR=/usr/local/bin/nvim
+export EDITOR=/usr/bin/nvim
 
 shopt -s histappend
 export gnarleyHostName=`hostname | cut -d\.  -f1`
@@ -116,6 +116,7 @@ function nvimrc
 	vi init.vim
 	cd -
 }
+alias vimrc="nvimrc"
 
 # function vimrc
 # {
@@ -126,7 +127,7 @@ function nvimrc
 
 function cdf
 {
-    FOUND_FILE=`find . | grep -i "$1" | egrep -v "Archived Notes|venv|node_modules|pycache|DashboardNavbar" | fzf`
+    FOUND_FILE=`find . | grep -i "$1" | egrep -v "Archived Notes|venv|node_modules|pycache|DashboardNavbar" | fzy`
     #FOUND_FILE=`find . | grep -i "$1" | egrep -v "Archived Notes|venv|node_modules|pycache|DashboardNavbar" | head -n 1`
     echo "Found: $FOUND_FILE"
     if [ ! -d "$FOUND_FILE" ]; then
@@ -141,6 +142,11 @@ function gnarleyFind
 {
 	find . | grep -i "$1"
 	#alias gnarleyFind='export LANG=C; find . | grep -i "$1"'
+}
+
+function gnarleyFindV
+{
+    nvim -p "`gnarleyFind "$@" | sort | uniq`"
 }
 
 function gitClean
