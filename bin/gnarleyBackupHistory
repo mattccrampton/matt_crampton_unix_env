@@ -1,0 +1,16 @@
+
+BACKUP_BASH_HISTORY_FILE=/Users/matt/Dropbox/MATT_PERSONAL_NOTES/Development/bash/backup_bash_history.txt
+BACKUP_BASH_HISTORY_TMP_FILE=/tmp/backup_bash_history.txt
+
+if [[ -f "$BACKUP_BASH_HISTORY_FILE" ]]; then
+
+    # Unique lines in history sorted by last used
+    history -w /dev/stdout | cat -n | sort -rk2 | sort -uk2 | sort -nk1 | cut -f2- > $BACKUP_BASH_HISTORY_TMP_FILE
+
+    # Store lines that aren't already in my backup history
+    awk 'FNR==NR{a[$0]=1;next}!($0 in a)' $BACKUP_BASH_HISTORY_FILE $BACKUP_BASH_HISTORY_TMP_FILE >> $BACKUP_BASH_HISTORY_FILE
+
+    # Cleanup
+    rm $BACKUP_BASH_HISTORY_TMP_FILE
+
+fi

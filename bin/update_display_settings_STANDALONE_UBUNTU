@@ -1,4 +1,5 @@
 #!/bin/bash
+#list monitors: xrandr --listmonitors
 # zenity --info --text="STARTING CHANGE\n$(xrandr --listmonitors)"
 
 xrandr > /dev/null

@@ -3,7 +3,7 @@
 export HISTFILE=~/.bash_history
 export HISTSIZE=200000;
 export HISTCONTROL=ignoreboth:erasedups
-export EDITOR=/usr/bin/nvim
+export EDITOR=/usr/local/bin/nvim
 
 shopt -s histappend
 export gnarleyHostName=`hostname | cut -d\.  -f1`
@@ -193,7 +193,9 @@ function gnarleyGrepC
 function gnarleyGrepV
 {
     # Fixed spaces in filenames
-    nvim -p "`gnarleyGrep "$@" | cut -d\: -f1 | sort | uniq`"
+    # nvim -p "`gnarleyGrep "$@" | cut -d\: -f1 | sort | uniq`"
+    # removed quotes
+    nvim -p `gnarleyGrep "$@" | cut -d\: -f1 | sort | uniq`
 }
 
 function gnarleyGrep
@@ -224,23 +226,24 @@ function gnarleyHistory
 {
 
 	# Usage: gnarleyHistory clone api
-	if [[ $# -gt 0 ]]; then
-		TEMP=("history | grep" "-ie" "\"\$1\"" "")
-		for (( I = 2; I <= $#; ++I )); do
-			TEMP=("${TEMP[@]}" "|" "egrep" "-ie" "\"\$${I}\"")
-		done
-		#echo "${TEMP[@]}"
-		eval "${TEMP[@]}"
-    else
-	 	history
-	fi
-
-	# if [ "$1" == "" ]
-	# then
-	# 	history
-	# else
-	# 	history | grep -i "$1"
+	# if [[ $# -gt 0 ]]; then
+		# TEMP=("history | grep" "-ie" "\"\$1\"" "")
+		# for (( I = 2; I <= $#; ++I )); do
+			# TEMP=("${TEMP[@]}" "|" "egrep" "-ie" "\"\$${I}\"")
+		# done
+		# eval "${TEMP[@]}"
+    # else
+		 # history
 	# fi
+
+    gnarleyBackupHistory
+    BACKUP_BASH_HISTORY_FILE=/Users/matt/Dropbox/MATT_PERSONAL_NOTES/Development/bash/backup_bash_history.txt
+    if [ "$1" == "" ]
+    then
+        cat $BACKUP_BASH_HISTORY_FILE
+    else
+        cat $BACKUP_BASH_HISTORY_FILE | grep -i "$1"
+    fi
 }
 
 
@@ -396,6 +399,9 @@ function setPS1
 		export PS1="[\[\e[37;1m\]\u\[\e[31;1m\]@\[\e[37;1m\]$gnarleyHostName\[\e[0m\]`generateGitBashData`|\[\e[31;1m\]VENV\[\e[37;1m\]]\[\e[32m\] \w/\[\e[0m\]"
 	fi
 
+    # 2020-2-8 experiment saving history to backup file
+    gnarleyBackupHistory
+
     # Set TMUX window title
     # if [ -n "$TMUX" ]
     # then
@@ -420,7 +426,7 @@ function gnarleyVim
     
     # Fixed spaces in filenames
     #/usr/bin/vim -p "$@"
-    /usr/bin/nvim -p "$@"
+    /usr/local/bin/nvim -p "$@"
 
     # if [ -n "$TMUX" ]; then
     #     if [ `tmux list-sessions 2>&1 | grep -v "error" |  grep -v "no server running" | wc -l` -gt 0 ]; then

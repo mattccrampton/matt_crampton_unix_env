@@ -49,6 +49,8 @@ let loaded_matchparen = 1
 """ Move Vertically
 " note: use :verbose map [ to figure out what's remapping the key if this
 " doens't work or is choppy
+noremap <PageUp> 1<C-Y>
+noremap <PageDown> 1<C-E>
 noremap [ 1<C-Y>
 noremap ] 1<C-E>
 "map j 1<C-Y>
@@ -100,7 +102,8 @@ map l :set invlist<CR>
 """ Paging
 noremap <Space> <PageDown>
 noremap - <PageUp>
-" nmap - <Plug>NetrwBrowseUpDir
+" noremap <Space> <C-U>
+" noremap - <C-B>
 
 
 """ FILETYPES """"""""""""""""""""""""""""""""""""""""""""""""""
@@ -148,14 +151,21 @@ let g:ale_lint_delay = 500
 " highlight ALEWarning ctermbg=DarkMagenta
 highlight SignColumn ctermbg=Black
 let g:ale_linters = {
-    \ 'javascript': ['eslint']
+    \ 'javascript': ['eslint'],
+    \ 'html': ['htmlhint'],
+    \ 'css': ['stylelint'],
+    \ 'scss': ['stylelint']
     \ }
 let g:ale_fixers = {
-    \ 'javascript': ['prettier'],
+    \ 'javascript': ['eslint'],
+    \ 'html': ['html-beautify'],
     \ 'css': ['prettier'],
+    \ 'scss': ['prettier']
     \ }
 let g:ale_javascript_eslint_executable='npx eslint'
 let g:ale_linters_explicit = 1
+let g:ale_javascript_prettier_options = '--tab-width 4'
+
 noremap F :ALEFix<CR>:%s:{' '}::g<CR>:ALEFix<CR>
 
 """ https://github.com/davidhalter/jedi-vim
@@ -167,6 +177,12 @@ Plug 'cakebaker/scss-syntax.vim'
 
 """ https://github.com/airblade/vim-gitgutter
 Plug 'airblade/vim-gitgutter'
+" from: https://github.com/zxYin/dotfiles/blob/master/.vimrc
+let g:gitgutter_sign_added = '▌'
+let g:gitgutter_sign_modified = '▌'
+let g:gitgutter_sign_removed = '▁'
+let g:gitgutter_sign_removed_first_line = '▌'
+let g:gitgutter_sign_modified_removed = '▌'
 let g:gitgutter_map_keys = 0
 set updatetime=250
 " let g:gitgutter_sign_column_always=1
@@ -181,16 +197,19 @@ set signcolumn=yes
 " call denite#custom#source('grep', 'converters', ['converter/abbr_word'])
 
 """ https://github.com/junegunn/fzf.vim
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 " Plug '/usr/local/opt/fzf'
 " Plug 'junegunn/fzf.vim'
-" let g:fzf_action = { 'enter': 'tabedit' }
-" let g:fzf_layout = { 'window': '-tabnew' }
-" " vnoremap ,g "zy:Rg <C-R>z<CR>
-" vnoremap ,f "zy:Locate <C-R>z<CR>
-" noremap ,g "zyiw:Rg <C-R>z<CR>
-" noremap ,f :Files<CR>
-" " noremap ,f "zyiw:FZF -q <C-R>z<CR>
-" noremap gf "zyiw:FZF -q <C-R>z<CR>
+let g:fzf_action = { 'enter': 'tabedit' }
+let g:fzf_layout = { 'window': '-tabnew' }
+" Dunno what these are " vnoremap ,g "zy:Rg <C-R>z<CR>
+" Dunno what these are vnoremap ,f "zy:Locate <C-R>z<CR>
+" Dunno what these are noremap ,g "zyiw:Rg <C-R>z<CR>
+" Dunno what these are noremap ,f :Files<CR>
+" Dunno what these are " noremap ,f "zyiw:FZF -q <C-R>z<CR>
+" Dunno what these are noremap gf "zyiw:FZF -q <C-R>z<CR>
+map ,f :Files .<CR>
 
 call plug#end()
 " run when updating...
