@@ -48,8 +48,8 @@ alias c="clear"
 alias cd..="cd .."
 alias h="gnarleyHistory"
 alias d="dir"
-alias cp="cp -v"
-alias mv="mv -v"
+#alias cp="cp -v"
+#alias mv="mv -v"
 # alias vi="vim -p"
 alias nvim="gnarleyVim"
 alias vim="gnarleyVim"
@@ -241,7 +241,8 @@ function gnarleyHistory
 	# fi
 
     gnarleyBackupHistory
-    BACKUP_BASH_HISTORY_FILE=/Users/matt/Dropbox/MATT_PERSONAL_NOTES/Development/bash/backup_bash_history.txt
+    # BACKUP_BASH_HISTORY_FILE=/Users/matt/Dropbox/MATT_PERSONAL_NOTES/Development/bash/backup_bash_history.txt
+    BACKUP_BASH_HISTORY_FILE=/Users/matt/code/matt_notes/Development/bash/backup_bash_history.txt
     if [ "$1" == "" ]
     then
         cat $BACKUP_BASH_HISTORY_FILE
