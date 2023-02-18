@@ -99,6 +99,15 @@ then
 fi
 
 
+#### RUBY STUFF ########################################
+
+if [ -f /usr/local/opt/chruby/share/chruby/chruby.sh ]
+then
+  source /usr/local/opt/chruby/share/chruby/chruby.sh
+  source /usr/local/opt/chruby/share/chruby/auto.sh
+  chruby ruby-3.1.3
+fi
+
 
 #### UTIL FUNCTIONS ####################################
 function pcopy
@@ -126,7 +135,7 @@ alias vimrc="nvimrc"
 	# cd -
 # }
 
-function cdf
+function cdfOLD
 {
     FOUND_FILE=`find . | grep -i "$1" | egrep -v "Archived Notes|venv|node_modules|pycache|DashboardNavbar" | fzy`
     #FOUND_FILE=`find . | grep -i "$1" | egrep -v "Archived Notes|venv|node_modules|pycache|DashboardNavbar" | head -n 1`
@@ -137,6 +146,17 @@ function cdf
     echo "CDing to $FOUND_FILE"
     cd "$FOUND_FILE"
     gnarleyDir
+}
+
+function cdf
+{
+    if [ -f $1 ]
+    then
+        echo "Found file"
+        cd $(dirname $1)
+	else
+		echo "File not found"
+    fi
 }
 
 function gnarleyFind
@@ -230,25 +250,25 @@ function gnarleyHistory
 {
 
 	# Usage: gnarleyHistory clone api
-	# if [[ $# -gt 0 ]]; then
-		# TEMP=("history | grep" "-ie" "\"\$1\"" "")
-		# for (( I = 2; I <= $#; ++I )); do
-			# TEMP=("${TEMP[@]}" "|" "egrep" "-ie" "\"\$${I}\"")
-		# done
-		# eval "${TEMP[@]}"
-    # else
-		 # history
-	# fi
-
-    gnarleyBackupHistory
-    # BACKUP_BASH_HISTORY_FILE=/Users/matt/Dropbox/MATT_PERSONAL_NOTES/Development/bash/backup_bash_history.txt
-    BACKUP_BASH_HISTORY_FILE=/Users/matt/code/matt_notes/Development/bash/backup_bash_history.txt
-    if [ "$1" == "" ]
-    then
-        cat $BACKUP_BASH_HISTORY_FILE
+    if [[ $# -gt 0 ]]; then
+        TEMP=("history | grep" "-ie" "\"\$1\"" "")
+        for (( I = 2; I <= $#; ++I )); do
+            TEMP=("${TEMP[@]}" "|" "egrep" "-ie" "\"\$${I}\"")
+        done
+        eval "${TEMP[@]}"
     else
-        cat $BACKUP_BASH_HISTORY_FILE | grep -i "$1"
+         history
     fi
+
+    # gnarleyBackupHistory
+    # BACKUP_BASH_HISTORY_FILE=/Users/matt/Dropbox/MATT_PERSONAL_NOTES/Development/bash/backup_bash_history.txt
+    # BACKUP_BASH_HISTORY_FILE=/Users/matt/code/matt_notes/Development/bash/backup_bash_history.txt
+    # if [ "$1" == "" ]
+    # then
+        # cat $BACKUP_BASH_HISTORY_FILE
+    # else
+        # cat $BACKUP_BASH_HISTORY_FILE | grep -i "$1"
+    # fi
 }
 
 
@@ -374,7 +394,7 @@ function generateGitBashData
         # GITPS1="${GITPS1// /}"
         # echo "|git:$GITPS1"
 		echo ""
-	else 
+	else
         # echo $GIT_BRANCH
         # echo ${#GIT_BRANCH}
         if [ ${#GIT_BRANCH} -ge 25 ]
@@ -428,7 +448,7 @@ function gnarleyVim
     #        tmux rename-window "vim"
     #    fi
     #fi
-    
+
     # Fixed spaces in filenames
     #/usr/bin/vim -p "$@"
     /usr/local/bin/nvim -p "$@"
@@ -443,24 +463,24 @@ function gnarleyVim
 setPromptCommand
 #setPS1
 
-unameString=`uname -a`
+# unameString=`uname -a`
 
 ## DOES TMUX AND SCREEN CHECKING #############################
-if command_exists tmux ; then
-	if [ ! -n "$TMUX" ]; then
-		if [ `tmux list-sessions 2>&1 | grep -v "error" |  grep -v "no server running" | wc -l` -gt 0 ]; then	
-			echo ""
-			echo "----------"
-			echo "There are open TMUX sessions on this box..."
-			tmux list-sessions
-			echo "run 'tmux attach' to re-attach"
-			echo "----------"
-			echo ""
-		fi
-    # else
-        # tmux rename-window "              "
-	fi
-fi
+# if command_exists tmux ; then
+# 	if [ ! -n "$TMUX" ]; then
+# 		if [ `tmux list-sessions 2>&1 | grep -v "error" |  grep -v "no server running" | wc -l` -gt 0 ]; then
+# 			echo ""
+# 			echo "----------"
+# 			echo "There are open TMUX sessions on this box..."
+# 			tmux list-sessions
+# 			echo "run 'tmux attach' to re-attach"
+# 			echo "----------"
+# 			echo ""
+# 		fi
+#     # else
+#         # tmux rename-window "              "
+# 	fi
+# fi
 
 
 #Echos status to screen
