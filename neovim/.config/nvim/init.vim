@@ -7,14 +7,11 @@ Plug 'morhetz/gruvbox'
 Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
 call plug#end()
 
-lua << CATPPUCCIN
-require("catppuccin").setup {
-  color_overrides = {
-    mocha = { base = "#000000", mantle = "#000000", crust = "#000000" }
-  }
-}
-CATPPUCCIN
-colorscheme catppuccin-mocha
+set background=dark
+colorscheme gruvbox
+highlight Normal guibg=#000000 ctermbg=0
+highlight SignColumn guibg=#000000 ctermbg=0
+highlight LineNr guibg=#000000 ctermbg=0
 
 " Enable treesitter highlighting for these filetypes
 lua << EOF
@@ -137,6 +134,7 @@ noremap - <PageUp>
 
 
 """ FILETYPES """"""""""""""""""""""""""""""""""""""""""""""""""
+autocmd BufNewFile,BufRead *.ejs set filetype=html
 autocmd FileType yaml,yml setlocal ts=2 sts=2 sw=2 expandtab
 
 
